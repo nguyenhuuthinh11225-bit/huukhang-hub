@@ -92,13 +92,15 @@ Tabs.Main1:AddButton({
 		loadstring(game:HttpGet("https://raw.githubusercontent.com/trongnhan2927-maker/mamaboyhub/refs/heads/main/mamaboyhubupdate.lua"))()
 	end
 })Tabs.Main2:AddButton({
-	Title = "trong nhan vip🌱",                             -- 👈 tên nút hiển thị
+	Title = "treo afk nha ae 🌱",                             -- 👈 tên nút hiển thị
 	Description = "script này ngon á đủ chức năng cả😃",-- 👈 mô tả
 	Callback = function()
 		local Settings = {
 			JoinTeam = "Pirates";   -- 👈 team mặc định: Pirates hoặc Marines
 			Translator = true;      -- 👈 bật dịch sang tiếng Việt nếu có
 		}
-		loadstring(game:HttpGet("https://raw.githubusercontent.com/hoanganhhub-luacrack/Cong-Dong-Viet-Nam/refs/heads/main/hoanganhhub.lua"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/vesaulotxac9-collab/Xinko/refs/heads/main/Primedinh"))()
+		end
+hhub.lua"))()
 	end
 })
