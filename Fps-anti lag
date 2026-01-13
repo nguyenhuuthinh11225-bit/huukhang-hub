@@ -1,0 +1,89 @@
+-- 🌟 Script FPS Boost + Lag Fix + Ultra Low Graphics + FPS & Ping
+
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+local Lighting = game:GetService("Lighting")
+local player = Players.LocalPlayer
+
+-- Tạo GUI hiển thị FPS + Ping
+local gui = Instance.new("ScreenGui")
+gui.Name = "FPSPingGui"
+gui.Parent = player:WaitForChild("PlayerGui")
+gui.ResetOnSpawn = false
+
+local infoLabel = Instance.new("TextLabel")
+infoLabel.Parent = gui
+infoLabel.BackgroundTransparency = 1
+infoLabel.Position = UDim2.new(1, -150, 0, 10)
+infoLabel.Size = UDim2.new(0, 140, 0, 40)
+infoLabel.Font = Enum.Font.SourceSansBold
+infoLabel.TextSize = 18
+infoLabel.TextColor3 = Color3.fromRGB(0, 255, 0)
+infoLabel.TextStrokeTransparency = 0
+infoLabel.TextXAlignment = Enum.TextXAlignment.Right
+infoLabel.TextYAlignment = Enum.TextYAlignment.Top
+
+-- 🔹 Xóa hiệu ứng rác
+for _, v in pairs(game:GetDescendants()) do
+    if v:IsA("ParticleEmitter") or v:IsA("Trail") or v:IsA("Explosion") or v:IsA("Beam") then
+        v.Enabled = false
+    elseif v:IsA("Texture") or v:IsA("Decal") then
+        v.Transparency = 1
+    elseif v:IsA("SurfaceGui") or v:IsA("BillboardGui") then
+        v.Enabled = false
+    elseif v:IsA("Light") then
+        v.Enabled = false
+    end
+end
+
+-- 🔹 Xóa hết vật thể quá chi tiết (optional, cực low)
+for _, v in pairs(workspace:GetDescendants()) do
+    if v:IsA("Part") or v:IsA("MeshPart") or v:IsA("UnionOperation") then
+        v.Material = Enum.Material.Plastic
+        v.Color = Color3.fromRGB(255,255,255)
+        v.Reflectance = 0
+        v.CastShadow = false
+    end
+end
+
+-- 🔹 Giảm đồ họa cực thấp
+Lighting.GlobalShadows = false
+Lighting.Brightness = 1
+Lighting.FogEnd = 1e9
+Lighting.OutdoorAmbient = Color3.fromRGB(255,255,255)
+Lighting.ClockTime = 12
+Lighting.Ambient = Color3.fromRGB(255,255,255)
+
+pcall(function()
+    settings().Rendering.QualityLevel = "Level01"
+    settings().Rendering.TerrainDecoration = false
+    settings().Rendering.ShadowSoftness = 0
+    settings().Rendering.TerrainWaterWaveSize = 0
+end)
+
+-- 🔹 Tắt hiệu ứng nước, bloom, blur, depthOfField
+pcall(function()
+    Lighting.Blur.Enabled = false
+    Lighting.Bloom.Enabled = false
+    Lighting.ColorCorrection.Enabled = false
+    Lighting.DepthOfField.Enabled = false
+    Lighting.FogColor = Color3.fromRGB(255,255,255)
+end)
+
+-- 🌐 Hiển thị FPS + Ping
+local lastTime = tick()
+local fps = 0
+local frameCount = 0
+
+RunService.RenderStepped:Connect(function()
+    frameCount = frameCount + 1
+    if tick() - lastTime >= 1 then
+        fps = frameCount / (tick() - lastTime)
+        frameCount = 0
+        lastTime = tick()
+        local ping = math.floor(player:GetNetworkPing() * 1000)
+        infoLabel.Text = "FPS: "..math.floor(fps).."\nPing: "..ping.." ms"
+    end
+end)
+
+print("🎮 Ultra Low Graphics + FPS Boost script đã chạy!")
