@@ -1,0 +1,182 @@
+-- [[ HỆ THỐNG KIỂM TRA LOAD GAME ]]
+if not game:IsLoaded() then game.Loaded:Wait() end
+local Player = game.Players.LocalPlayer
+if not Player.Character then Player.CharacterAdded:Wait() end
+
+local StartTimeTick = tick()
+local StartTimeDisplay = os.date("%H:%M:%S")
+local MoneyObject = nil
+
+-- [1] HÀM TRUY VẾT TIỀN (FIX CHÍNH XÁC 100%)
+local function FindMoneyObject()
+    local stats = Player:FindFirstChild("leaderstats") or Player:FindFirstChild("Data") or Player:FindFirstChild("Stats")
+    if stats then
+        -- Tìm object nào có giá trị là số và tên liên quan đến tiền
+        for _, v in pairs(stats:GetChildren()) do
+            if v:IsA("NumberValue") or v:IsA("IntValue") then
+                local n = v.Name:lower()
+                if n:find("money") or n:find("cash") or n:find("beli") or n:find("yen") or n:find("gold") then
+                    return v
+                end
+            end
+        end
+        -- Nếu không thấy tên quen thuộc, lấy object số có giá trị lớn nhất
+        local maxVal = -1
+        local bestObj = nil
+        for _, v in pairs(stats:GetChildren()) do
+            if (v:IsA("NumberValue") or v:IsA("IntValue")) and v.Value > maxVal then
+                maxVal = v.Value
+                bestObj = v
+            end
+        end
+        return bestObj
+    end
+    return nil
+end
+
+MoneyObject = FindMoneyObject()
+local StartMoney = MoneyObject and MoneyObject.Value or 0
+
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+
+-- [[ KHỞI TẠO CỬA SỔ ]]
+local Window = Fluent:CreateWindow({
+    Title = "BO-NHO-VIP 👹",
+    SubTitle = "FIXED TOTAL - 100% ACCURACY",
+    TabWidth = 160,
+    Size = UDim2.fromOffset(580, 460),
+    Acrylic = false,
+    Theme = "Dark",
+    MinimizeKey = Enum.KeyCode.RightControl
+})
+
+local Tabs = { 
+    Main = Window:AddTab({ Title = "Farm Level", Icon = "rbxassetid://4483345998" }),
+    Stats = Window:AddTab({ Title = "Farm Tiền", Icon = "rbxassetid://7040419525" }) 
+}
+
+local Config = { Farm = false, Attack = false, Money = false, ResetWeapon = false }
+
+-- --- FIX NÚT CON MÈO ẨN/HIỆN (LOGIC MỚI) ---
+local ScreenGui = Instance.new("ScreenGui", game.CoreGui)
+ScreenGui.Name = "Mèo_Controller"
+local CatBtn = Instance.new("ImageButton", ScreenGui)
+CatBtn.Size = UDim2.fromOffset(60, 60)
+CatBtn.Position = UDim2.new(0.15, 0, 0.15, 0) -- Né các nút hệ thống
+CatBtn.Image = "rbxassetid://15443233987"
+CatBtn.BackgroundTransparency = 1
+CatBtn.Draggable = true
+CatBtn.Active = true
+
+local UIStroke = Instance.new("UIStroke", CatBtn)
+UIStroke.Thickness = 3
+Instance.new("UICorner", CatBtn).CornerRadius = UDim.new(1, 0)
+
+task.spawn(function()
+    while task.wait() do
+        UIStroke.Color = Color3.fromHSV(tick() % 5 / 5, 0.8, 1)
+    end
+end)
+
+-- Click để ẩn hiện (Sửa lỗi triệt để)
+CatBtn.MouseButton1Click:Connect(function()
+    if Window then
+        Window:Minimize() -- Sử dụng hàm Minimize chính chủ của Fluent
+    end
+end)
+
+-- --- TÍNH NĂNG AUTO FIX NGẦM ---
+task.spawn(function()
+    while task.wait(2) do
+        pcall(function()
+            if Config.Farm and not Player.Character:FindFirstChildOfClass("Tool") then
+                local tool = Player.Backpack:FindFirstChildOfClass("Tool")
+                if tool then tool.Parent = Player.Character end
+            end
+        end)
+    end
+end)
+
+-- --- TAB CHÍNH ---
+Tabs.Main:AddToggle("FarmNPC", {Title = "Auto Farm CityNPC (Safe Mode)", Default = false}):OnChanged(function(v) Config.Farm = v end)
+Tabs.Main:AddToggle("AutoAttack", {Title = "Auto Click (No Anim)", Default = false}):OnChanged(function(v) Config.Attack = v end)
+Tabs.Main:AddToggle("ResetWeapon", {Title = "Auto Reset Trang Bị (5 Giây)", Default = false}):OnChanged(function(v) Config.ResetWeapon = v end)
+Tabs.Main:AddToggle("AutoMoney", {Title = "Auto Nhặt Tiền", Default = false}):OnChanged(function(v) Config.Money = v end)
+
+-- --- TAB THỐNG KÊ TIỀN (CHÍNH XÁC TUYỆT ĐỐI) ---
+local LabelEarned = Tabs.Stats:AddParagraph({ Title = "💰 Tiền nhận được", Content = "0" })
+local LabelCurrent = Tabs.Stats:AddParagraph({ Title = "💵 Tiền hiện có", Content = "0" })
+local LabelTime = Tabs.Stats:AddParagraph({ Title = "⏳ Thời gian treo máy", Content = "Đang tính..." })
+
+task.spawn(function()
+    while task.wait(0.5) do
+        pcall(function()
+            -- Cập nhật lại MoneyObject nếu bị mất dấu
+            if not MoneyObject or not MoneyObject.Parent then MoneyObject = FindMoneyObject() end
+            
+            local cur = MoneyObject and MoneyObject.Value or 0
+            local earned = cur - StartMoney
+            
+            -- Định dạng số có dấu phẩy
+            local function fmt(n) return tostring(math.floor(n)):reverse():gsub("%d%d%d", "%1,"):reverse():gsub("^,", "") end
+            
+            LabelEarned:SetDesc(fmt(earned))
+            LabelCurrent:SetDesc(fmt(cur))
+            
+            local d = tick() - StartTimeTick
+            LabelTime:SetDesc(string.format("%02d:%02d:%02d\nBắt đầu: %s", math.floor(d/3600), math.floor((d%3600)/60), math.floor(d%60), StartTimeDisplay))
+        end)
+    end
+end)
+
+-- --- LOGIC FARM NPC ---
+task.spawn(function()
+    while task.wait() do
+        if Config.Farm then
+            pcall(function()
+                local npc = nil
+                for _, v in pairs(workspace:GetDescendants()) do
+                    if v.Name == "CityNPC" and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then npc = v break end
+                end
+                if npc and Player.Character then
+                    local hrp = Player.Character.HumanoidRootPart
+                    hrp.CFrame = npc.HumanoidRootPart.CFrame * CFrame.new(0, 11.5, 0) * CFrame.Angles(math.rad(-90), 0, 0)
+                    hrp.Velocity = Vector3.new(0,0,0)
+                    if Config.Attack then
+                        local t = Player.Character:FindFirstChildOfClass("Tool")
+                        if t then t:Activate() end
+                        for _, track in pairs(Player.Character.Humanoid:GetPlayingAnimationTracks()) do track:Stop() end
+                    end
+                end
+            end)
+        end
+    end
+end)
+
+-- --- RESET VŨ KHÍ 5 GIÂY ---
+task.spawn(function()
+    while task.wait(5) do
+        if Config.ResetWeapon and Config.Farm then
+            local char = Player.Character
+            local tool = char:FindFirstChildOfClass("Tool") or Player.Backpack:FindFirstChildOfClass("Tool")
+            if tool then
+                tool.Parent = Player.Backpack
+                task.wait(0.1)
+                tool.Parent = char
+            end
+        end
+    end
+end)
+
+-- --- NHẶT TIỀN ---
+task.spawn(function()
+    while task.wait(0.3) do
+        if Config.Money then
+            for _, v in pairs(workspace:GetDescendants()) do if v:IsA("ProximityPrompt") then fireproximityprompt(v) end end
+        end
+    end
+end)
+
+Player.Idled:Connect(function() game:GetService("VirtualUser"):ClickButton2(Vector2.new()) end)
+Window:SelectTab(1)
+Fluent:Notify({Title = "BO-NHO-VIP", Content = "Đã Fix lỗi Nút Mèo và Bộ đếm tiền!", Duration = 5})
