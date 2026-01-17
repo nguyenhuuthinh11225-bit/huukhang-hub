@@ -1,0 +1,174 @@
+--==================================================
+-- BO-NHOHUB | PRIME UNIVERSAL FIX LAG
+-- ALL EXECUTOR | ALL MAP | MOBILE SAFE
+--==================================================
+if not game:IsLoaded() then game.Loaded:Wait() end
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local Lighting = game:GetService("Lighting")
+local Stats = game:GetService("Stats")
+local VirtualUser = game:GetService("VirtualUser")
+local Camera = workspace.CurrentCamera
+
+local LP = Players.LocalPlayer
+local PG = LP:WaitForChild("PlayerGui")
+
+-- ===== AUTO TUNE =====
+local FPS_SOFT = 40
+local FPS_HARD = 24
+local HIDE_SOFT = 130
+local HIDE_HARD = 85
+
+local startTime = os.time()
+local frames = 0
+
+-- ===== FPS COUNT =====
+RunService.RenderStepped:Connect(function()
+    frames += 1
+end)
+
+-- ===== GUI ROOT =====
+local gui = Instance.new("ScreenGui", PG)
+gui.Name = "BoNhoHub_PrimeUniversal"
+gui.ResetOnSpawn = false
+
+-- ===== HUD SMALL (ALWAYS ON) =====
+local hud = Instance.new("TextLabel", gui)
+hud.Size = UDim2.new(0,190,0,60)
+hud.Position = UDim2.new(1,-200,0,10)
+hud.BackgroundColor3 = Color3.fromRGB(15,15,15)
+hud.BackgroundTransparency = 0.2
+hud.BorderSizePixel = 0
+hud.Font = Enum.Font.GothamBold
+hud.TextSize = 13
+hud.TextWrapped = true
+hud.TextColor3 = Color3.fromRGB(0,255,170)
+hud.ZIndex = 10000
+Instance.new("UICorner", hud).CornerRadius = UDim.new(0,12)
+
+-- ===== PRIME GUI (MAIN) =====
+local main = Instance.new("Frame", gui)
+main.Size = UDim2.new(0,260,0,160)
+main.Position = UDim2.new(0,15,0,15)
+main.BackgroundColor3 = Color3.fromRGB(14,14,14)
+main.BackgroundTransparency = 0.15
+main.BorderSizePixel = 0
+main.Active = true
+main.Draggable = true
+Instance.new("UICorner", main).CornerRadius = UDim.new(0,14)
+
+local title = Instance.new("TextLabel", main)
+title.Size = UDim2.new(1,0,0,34)
+title.BackgroundTransparency = 1
+title.Font = Enum.Font.GothamBold
+title.TextSize = 17
+title.TextColor3 = Color3.fromRGB(0,255,170)
+title.Text = "BO-NHOHUB | PRIME VIP"
+
+local info = Instance.new("TextLabel", main)
+info.Position = UDim2.new(0,12,0,38)
+info.Size = UDim2.new(1,-24,1,-50)
+info.BackgroundTransparency = 1
+info.Font = Enum.Font.Gotham
+info.TextSize = 14
+info.TextWrapped = true
+info.TextColor3 = Color3.fromRGB(230,230,230)
+
+-- ===== FLOAT 💀 TOGGLE (SEPARATE) =====
+local toggle = Instance.new("TextButton", gui)
+toggle.Size = UDim2.new(0,46,0,46)
+toggle.Position = UDim2.new(0,15,0,190)
+toggle.Text = "💀"
+toggle.TextSize = 22
+toggle.Font = Enum.Font.GothamBold
+toggle.TextColor3 = Color3.fromRGB(255,80,80)
+toggle.BackgroundColor3 = Color3.fromRGB(20,20,20)
+toggle.BorderSizePixel = 0
+toggle.Active = true
+toggle.Draggable = true
+toggle.ZIndex = 10001
+Instance.new("UICorner", toggle).CornerRadius = UDim.new(1,0)
+
+toggle.MouseButton1Click:Connect(function()
+    main.Visible = not main.Visible
+end)
+
+-- ===== GRAPHIC CUT (~70%, SAFE) =====
+local function cut(v)
+    if v:IsA("ParticleEmitter") or v:IsA("Trail") or v:IsA("Beam") then
+        v.Enabled = false
+    elseif v:IsA("Decal") or v:IsA("Texture") then
+        v.Transparency = 1
+    elseif v:IsA("PointLight") or v:IsA("SpotLight") or v:IsA("SurfaceLight") then
+        v.Enabled = false
+    elseif v:IsA("BasePart") then
+        v.Material = Enum.Material.Plastic
+        v.CastShadow = false
+        v.Reflectance = 0
+    end
+end
+
+for _,v in ipairs(workspace:GetDescendants()) do
+    pcall(function() cut(v) end)
+end
+workspace.DescendantAdded:Connect(function(v)
+    task.wait()
+    pcall(function() cut(v) end)
+end)
+
+-- ===== MAIN LOOP (UNIVERSAL, 1s) =====
+task.spawn(function()
+    while task.wait(1) do
+        local fps = frames
+        frames = 0
+
+        local ping = 0
+        pcall(function()
+            ping = math.floor(Stats.Network.ServerStatsItem["Data Ping"]:GetValue())
+        end)
+
+        Lighting.GlobalShadows = false
+        Lighting.ExposureCompensation = -0.08
+        Lighting.EnvironmentDiffuseScale = 0.45
+        Lighting.EnvironmentSpecularScale = 0.45
+        for _,e in ipairs(Lighting:GetChildren()) do
+            if e:IsA("PostEffect") then e.Enabled = false end
+        end
+
+        local mode = "STABLE"
+        local hideDist = HIDE_SOFT
+        if fps < FPS_SOFT then mode = "FIX" end
+        if fps < FPS_HARD then
+            mode = "ULTRA"
+            hideDist = HIDE_HARD
+        end
+
+        for _,plr in ipairs(Players:GetPlayers()) do
+            if plr ~= LP and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+                local d = (plr.Character.HumanoidRootPart.Position - Camera.CFrame.Position).Magnitude
+                for _,p in ipairs(plr.Character:GetDescendants()) do
+                    if p:IsA("BasePart") then
+                        p.LocalTransparencyModifier = (d > hideDist) and 1 or 0
+                    end
+                end
+            end
+        end
+
+        local t = os.time() - startTime
+        hud.Text = string.format(
+            "BO-NHOHUB PRIME\nFPS: %d | PING: %d ms\nTIME: %02d:%02d",
+            fps, ping, math.floor(t/60), t%60
+        )
+        info.Text = "MODE: "..mode.."\nAUTO FIX LAG ENABLED\nALL EXECUTOR • ALL MAP"
+    end
+end)
+
+-- ===== ANTI AFK =====
+LP.Idled:Connect(function()
+    VirtualUser:Button2Down(Vector2.new(0,0), Camera.CFrame)
+    task.wait(1)
+    VirtualUser:Button2Up(Vector2.new(0,0), Camera.CFrame)
+end)
+
+print("BO-NHOHUB PRIME UNIVERSAL LOADED")
