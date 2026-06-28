@@ -1,0 +1,324 @@
+-- [[ PRIME VIP HUB - VERSION 15 - HIGH SENSITIVITY NOCLIP & TOGGLE LAG FIX ]] --
+local ScreenGui = Instance.new("ScreenGui")
+local MainFrame = Instance.new("Frame")
+local UICorner = Instance.new("UICorner")
+local UIStroke = Instance.new("UIStroke")
+local Title = Instance.new("TextLabel")
+local ToggleButton = Instance.new("TextButton")
+local ToggleStroke = Instance.new("UIStroke")
+
+local AimbotButton = Instance.new("TextButton")
+local EspButton = Instance.new("TextButton")
+local NoclipButton = Instance.new("TextButton")
+local AntiLagButton = Instance.new("TextButton")
+
+local SpeedFrame = Instance.new("Frame")
+local SpeedLabel = Instance.new("TextLabel")
+local SpeedInput = Instance.new("TextBox")
+
+-- [1] TỰ ĐỘNG XÓA BẢN CŨ TRÁNH XUNG ĐỘT
+for _, v in pairs(game.CoreGui:GetChildren()) do
+    if v.Name:find("PrimeVIP") then v:Destroy() end
+end
+
+ScreenGui.Name = "PrimeVIP_V15_Fluent"
+ScreenGui.Parent = game.CoreGui
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+-- [2] NÚT ẨN HIỆN ☠️ VIỀF RAINBOW
+ToggleButton.Name = "SkullToggle"
+ToggleButton.Parent = ScreenGui
+ToggleButton.BackgroundColor3 = Color3.fromRGB(30, 25, 35)
+ToggleButton.BackgroundTransparency = 0.2
+ToggleButton.Position = UDim2.new(0.88, 0, 0.15, 0)
+ToggleButton.Size = UDim2.new(0, 36, 0, 36)
+ToggleButton.Text = "☠️"
+ToggleButton.TextSize = 18
+ToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+Instance.new("UICorner", ToggleButton).CornerRadius = UDim.new(1, 0)
+
+ToggleStroke.Thickness = 1.8
+ToggleStroke.Parent = ToggleButton
+
+-- [3] KHUNG GIAO DIỆN MAIN ULTRA COMPACT
+MainFrame.Parent = ScreenGui
+MainFrame.BackgroundColor3 = Color3.fromRGB(28, 26, 32)
+MainFrame.BackgroundTransparency = 0.15
+MainFrame.Position = UDim2.new(0.5, -105, 0.35, -115)
+MainFrame.Size = UDim2.new(0, 210, 0, 240)
+MainFrame.Active = true
+
+UICorner.CornerRadius = UDim.new(0, 16)
+UICorner.Parent = MainFrame
+
+UIStroke.Thickness = 2.5
+UIStroke.Parent = MainFrame
+
+Title.Parent = MainFrame
+Title.Size = UDim2.new(1, 0, 0, 35)
+Title.Text = "✨ Prime Chibi ✨"
+Title.TextColor3 = Color3.fromRGB(255, 215, 230)
+Title.TextSize = 15
+Title.Font = Enum.Font.FredokaOne
+Title.BackgroundTransparency = 1
+
+-- BẢNG CHỨA STROKE RAINBOW
+local RainbowStrokes = {UIStroke, ToggleStroke}
+
+local function StyleButtonWithRainbow(btn, text, pos)
+    btn.Parent = MainFrame
+    btn.Position = pos
+    btn.Size = UDim2.new(0.88, 0, 0, 28)
+    btn.Text = text
+    btn.BackgroundColor3 = Color3.fromRGB(210, 70, 90)
+    btn.Font = Enum.Font.FredokaOne
+    btn.TextColor3 = Color3.new(1, 1, 1)
+    btn.TextSize = 11
+    Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 8)
+    
+    local btnStroke = Instance.new("UIStroke", btn)
+    btnStroke.Thickness = 1.5
+    table.insert(RainbowStrokes, btnStroke)
+end
+
+StyleButtonWithRainbow(AimbotButton, "🎯 Aimbot Head: OFF", UDim2.new(0.06, 0, 0.17, 0))
+StyleButtonWithRainbow(EspButton, "👁️ ESP Box: OFF", UDim2.new(0.06, 0, 0.31, 0))
+StyleButtonWithRainbow(NoclipButton, "🧱 Noclip: OFF", UDim2.new(0.06, 0, 0.45, 0))
+StyleButtonWithRainbow(AntiLagButton, "⚡ Siêu Giảm Lag: OFF", UDim2.new(0.06, 0, 0.59, 0))
+
+-- ĐIỀU CHỈNH TỐC ĐỘ CHẠY
+SpeedFrame.Parent = MainFrame
+SpeedFrame.BackgroundTransparency = 1
+SpeedFrame.Position = UDim2.new(0.06, 0, 0.76, 0)
+SpeedFrame.Size = UDim2.new(0.88, 0, 0, 30)
+
+SpeedLabel.Parent = SpeedFrame
+SpeedLabel.Size = UDim2.new(0.65, 0, 1, 0)
+SpeedLabel.Text = "🐾 Tốc độ chạy:"
+SpeedLabel.TextColor3 = Color3.fromRGB(240, 240, 245)
+SpeedLabel.Font = Enum.Font.FredokaOne
+SpeedLabel.TextSize = 11
+SpeedLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+SpeedInput.Parent = SpeedFrame
+SpeedInput.Position = UDim2.new(0.65, 0, 0.1, 0)
+SpeedInput.Size = UDim2.new(0.35, 0, 0.8, 0)
+SpeedInput.BackgroundColor3 = Color3.fromRGB(45, 40, 50)
+SpeedInput.Text = "1"
+SpeedInput.TextColor3 = Color3.fromRGB(255, 180, 200)
+SpeedInput.Font = Enum.Font.FredokaOne
+SpeedInput.TextSize = 12
+Instance.new("UICorner", SpeedInput).CornerRadius = UDim.new(0, 6)
+
+
+-- // HỆ THỐNG BIẾN SỐ TOÀN CỤC //
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local Camera = workspace.CurrentCamera
+local RunService = game:GetService("RunService")
+local VirtualUser = game:GetService("VirtualUser")
+local Lighting = game:GetService("Lighting")
+
+local AimbotEnabled = false
+local EspEnabled = false
+local NoclipEnabled = false
+local AntiLagEnabled = false
+local CustomWalkSpeed = 1
+
+-- Lưu trữ chất liệu gốc của map để hoàn tác khi tắt giảm lag
+local OriginalMaterials = {}
+local OriginalColors = {}
+
+-- ANTI-AFK TREO MÁY
+LocalPlayer.Idled:Connect(function()
+    VirtualUser:Button2Down(Vector2.new(0,0), Camera.CFrame)
+    task.wait(1)
+    VirtualUser:Button2Up(Vector2.new(0,0), Camera.CFrame)
+end)
+
+-- [4] FIX LỖI: NÚT FIX LAG CÓ THỂ BẬT / TẮT LINH HOẠT
+AntiLagButton.MouseButton1Click:Connect(function()
+    AntiLagEnabled = not AntiLagEnabled
+    if AntiLagEnabled then
+        AntiLagButton.Text = "⚡ Siêu Giảm Lag: ON"
+        AntiLagButton.BackgroundColor3 = Color3.fromRGB(65, 160, 95)
+        
+        Lighting.ClockTime = 19
+        Lighting.Brightness = 1
+        Lighting.GlobalShadows = false
+        
+        for _, obj in pairs(workspace:GetDescendants()) do
+            if obj:IsA("BasePart") then
+                -- Sao lưu trước khi đổi
+                if not OriginalMaterials[obj] then OriginalMaterials[obj] = obj.Material end
+                obj.Material = Enum.Material.SmoothPlastic
+                if obj.Name:lower():find("leaf") or obj.Name:lower():find("tree") or obj.Name:lower():find("grass") then
+                    obj.CastShadow = false
+                end
+            elseif obj:IsA("Decal") or obj:IsA("Texture") then
+                if not OriginalColors[obj] then OriginalColors[obj] = obj.Transparency end
+                obj.Transparency = 1 -- Ẩn đi thay vì xóa hẳn để dễ khôi phục
+            end
+        end
+    else
+        AntiLagButton.Text = "⚡ Siêu Giảm Lag: OFF"
+        AntiLagButton.BackgroundColor3 = Color3.fromRGB(210, 70, 90)
+        
+        -- Khôi phục cấu hình gốc
+        Lighting.ClockTime = 12
+        Lighting.GlobalShadows = true
+        
+        for obj, mat in pairs(OriginalMaterials) do
+            if obj and obj.Parent then obj.Material = mat end
+        end
+        for obj, trans in pairs(OriginalColors) do
+            if obj and obj.Parent then obj.Transparency = trans end
+        end
+    end
+end)
+
+-- Thu gọn / Mở Menu bằng nút đầu lâu
+ToggleButton.MouseButton1Click:Connect(function() MainFrame.Visible = not MainFrame.Visible end)
+
+-- ĐỒNG BỘ HIỆU ỨNG RAINBOW MƯỢT MÀ
+RunService.RenderStepped:Connect(function()
+    local hue = (tick() % 4) / 4 
+    local rainbowColor = Color3.fromHSV(hue, 0.7, 1)
+    for _, stroke in pairs(RainbowStrokes) do
+        if stroke and stroke.Parent then stroke.Color = rainbowColor end
+    end
+end)
+
+-- KÉO THẢ DRAG MENU
+local function MakeSmoothDrag(frame)
+    local dragStart, startPos
+    frame.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            dragStart = input.Position; startPos = frame.Position
+            input.Changed:Connect(function() if input.UserInputState == Enum.UserInputState.End then dragStart = nil end end)
+        end
+    end)
+    frame.InputChanged:Connect(function(input)
+        if (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) and dragStart then
+            local delta = input.Position - dragStart
+            frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+        end
+    end)
+end
+MakeSmoothDrag(MainFrame)
+MakeSmoothDrag(ToggleButton)
+
+SpeedInput:GetPropertyChangedSignal("Text"):Connect(function() CustomWalkSpeed = tonumber(SpeedInput.Text) or 1 end)
+
+-- BẬT/TẮT NÚT AIMBOT
+AimbotButton.MouseButton1Click:Connect(function()
+    AimbotEnabled = not AimbotEnabled
+    AimbotButton.Text = AimbotEnabled and "🎯 Aimbot Head: ON" or "🎯 Aimbot Head: OFF"
+    AimbotButton.BackgroundColor3 = AimbotEnabled and Color3.fromRGB(65, 160, 95) or Color3.fromRGB(210, 70, 90)
+end)
+
+-- BẬT/TẮT NÚT ESP
+EspButton.MouseButton1Click:Connect(function()
+    EspEnabled = not EspEnabled
+    EspButton.Text = EspEnabled and "👁️ ESP Box: ON" or "👁️ ESP Box: OFF"
+    EspButton.BackgroundColor3 = EspEnabled and Color3.fromRGB(65, 160, 95) or Color3.fromRGB(210, 70, 90)
+end)
+
+-- [5] FIX LỖI: NÚT NOCLIP TĂNG CƯỜNG ĐỘ NHẠY BẰNG LỆNH ÉP KHUNG VẬT LÝ
+NoclipButton.MouseButton1Click:Connect(function()
+    NoclipEnabled = not NoclipEnabled
+    NoclipButton.Text = NoclipEnabled and "🧱 Noclip: ON" or "🧱 Noclip: OFF"
+    NoclipButton.BackgroundColor3 = NoclipEnabled and Color3.fromRGB(65, 160, 95) or Color3.fromRGB(210, 70, 90)
+end)
+
+-- Sử dụng chu kỳ Stepped để can thiệp chuẩn vào va chạm phần cứng nhân vật
+game:GetService("RunService").Stepped:Connect(function()
+    if NoclipEnabled then
+        local char = LocalPlayer.Character
+        if char then
+            for _, part in pairs(char:GetChildren()) do
+                if part:IsA("BasePart") and part.CanCollide == true then
+                    part.CanCollide = false
+                end
+            end
+        end
+    end
+end)
+
+-- VẬN HÀNH TỐC ĐỘ CHẠY ĐẤT BÌNH THƯỜNG
+RunService.RenderStepped:Connect(function()
+    local char = LocalPlayer.Character
+    local root = char and char:FindFirstChild("HumanoidRootPart")
+    local hum = char and char:FindFirstChildOfClass("Humanoid")
+    if root and hum and hum.Health > 0 then
+        if CustomWalkSpeed > 1 and hum.MoveDirection.Magnitude > 0 then
+            root.CFrame = root.CFrame + (hum.MoveDirection * (CustomWalkSpeed * 0.15))
+        end
+    end
+end)
+
+-- CORE HIỂN THỊ ESP BOX
+local function ClearAllBoxes()
+    for _, player in pairs(Players:GetPlayers()) do
+        if player.Character then
+            local box = player.Character:FindFirstChild("V15_BoxESP")
+            if box then box:Destroy() end
+        end
+    end
+end
+
+RunService.RenderStepped:Connect(function()
+    if EspEnabled then
+        for _, player in pairs(Players:GetPlayers()) do
+            if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") and player.Character:FindFirstChildOfClass("Humanoid") and player.Character:FindFirstChildOfClass("Humanoid").Health > 0 then
+                local char = player.Character
+                local root = char.HumanoidRootPart
+                
+                local boxInstance = char:FindFirstChild("V15_BoxESP")
+                if not boxInstance then
+                    boxInstance = Instance.new("BoxHandleAdornment")
+                    boxInstance.Name = "V15_BoxESP"
+                    boxInstance.Adornee = root
+                    boxInstance.AlwaysOnTop = true
+                    boxInstance.ZIndex = 5
+                    boxInstance.Size = Vector3.new(4, 5.5, 1.5)
+                    boxInstance.Color3 = Color3.fromRGB(255, 105, 180)
+                    boxInstance.Transparency = 0.5
+                    boxInstance.Parent = char
+                end
+            end
+        end
+    else
+        ClearAllBoxes()
+    end
+end)
+
+task.spawn(function()
+    while task.wait(5) do if EspEnabled then ClearAllBoxes() end end
+end)
+
+-- CORE AIMBOT LOCK HEAD
+local function GetClosestHead()
+    local TargetHead = nil
+    local ShortestDistance = math.huge
+    local MyChar = LocalPlayer.Character
+    if not MyChar or not MyChar:FindFirstChild("HumanoidRootPart") then return nil end
+    
+    for _, player in pairs(Players:GetPlayers()) do
+        if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild("Head") and player.Character:FindFirstChildOfClass("Humanoid") and player.Character:FindFirstChildOfClass("Humanoid").Health > 0 then
+            local Distance = (MyChar.HumanoidRootPart.Position - player.Character.Head.Position).Magnitude
+            if Distance < ShortestDistance then
+                ShortestDistance = Distance
+                TargetHead = player.Character.Head
+            end
+        end
+    end
+    return TargetHead
+end
+
+RunService.RenderStepped:Connect(function()
+    if AimbotEnabled then
+        local Head = GetClosestHead()
+        if Head then Camera.CFrame = CFrame.new(Camera.CFrame.Position, Head.Position) end
+    end
+end)
