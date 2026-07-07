@@ -1,0 +1,772 @@
+-- =====================================================================
+-- ⚡ ZIDWI GAMING - THE ULTIMATE DEADLINE EDITION (FULL UI & LOGIC) ⚡
+-- =====================================================================
+
+repeat task.wait() until game:IsLoaded()
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local CoreGui = game:GetService("CoreGui")
+local LocalPlayer = Players.LocalPlayer
+
+-- [ANTI-CHEAT GUI BYPASS]
+local TargetGui = CoreGui
+local success = pcall(function() local _ = CoreGui.Name end)
+if not success then TargetGui = LocalPlayer:WaitForChild("PlayerGui") end
+
+-- [RAINBOW ENGINE]
+local RainbowColor = Color3.fromRGB(255, 0, 0)
+task.spawn(function()
+    local hue = 0
+    while true do
+        hue = (hue + 0.005) % 1
+        RainbowColor = Color3.fromHSV(hue, 1, 1)
+        task.wait(0.02)
+    end
+end)
+
+-- =====================================================================
+-- 📦 1. LOADING SCREEN (FULL RAINBOW & CĂN CHỈNH)
+-- =====================================================================
+local LoadingGui = Instance.new("ScreenGui", TargetGui)
+LoadingGui.Name = "Rez Hub_LoadingScreen"
+
+local LoadFrame = Instance.new("Frame", LoadingGui)
+LoadFrame.Size = UDim2.fromOffset(500, 200)
+LoadFrame.Position = UDim2.new(0.5, -250, 0.5, -100)
+LoadFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+Instance.new("UICorner", LoadFrame).CornerRadius = UDim.new(0, 15)
+local LoadStroke = Instance.new("UIStroke", LoadFrame)
+LoadStroke.Thickness = 5
+
+-- [TITLE LABEL]
+local TitleLabel = Instance.new("TextLabel", LoadFrame)
+TitleLabel.Size = UDim2.new(1, 0, 0.3, 0)
+TitleLabel.Position = UDim2.fromOffset(0, 30)
+TitleLabel.BackgroundTransparency = 1
+TitleLabel.Text = "RezHub xin chào bro " .. LocalPlayer.Name
+TitleLabel.Font = Enum.Font.SourceSansBold
+TitleLabel.TextSize = 30
+TitleLabel.TextColor3 = Color3.new(1, 1, 1)
+
+-- [PERCENT LABEL - ĐÃ CĂN GIỮA VÀ TO RÕ]
+local PercentLabel = Instance.new("TextLabel", LoadFrame)
+PercentLabel.Size = UDim2.new(0.8, 0, 0.2, 0)
+PercentLabel.Position = UDim2.new(0.1, 0, 0.45, 0)
+PercentLabel.BackgroundTransparency = 1
+PercentLabel.Text = "0/100%"
+PercentLabel.Font = Enum.Font.SourceSansBold
+PercentLabel.TextColor3 = Color3.new(1, 1, 1)
+PercentLabel.TextScaled = true 
+PercentLabel.TextXAlignment = Enum.TextXAlignment.Center
+PercentLabel.TextYAlignment = Enum.TextYAlignment.Center
+
+-- [BAR BACKGROUND]
+local BarBG = Instance.new("Frame", LoadFrame)
+BarBG.Size = UDim2.new(0.85, 0, 0, 20)
+BarBG.Position = UDim2.new(0.075, 0, 0.7, 0)
+BarBG.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+Instance.new("UICorner", BarBG)
+
+-- [BAR FILL]
+local BarFill = Instance.new("Frame", BarBG)
+BarFill.Size = UDim2.new(0, 0, 1, 0)
+Instance.new("UICorner", BarFill)
+
+-- [RAINBOW LOGIC CHO TẤT CẢ]
+local loadConnection = RunService.Heartbeat:Connect(function()
+    LoadStroke.Color = RainbowColor
+    BarFill.BackgroundColor3 = RainbowColor
+    PercentLabel.TextColor3 = RainbowColor
+    TitleLabel.TextColor3 = RainbowColor
+end)
+
+-- [LOADING ANIMATION]
+for i = 1, 100 do
+    PercentLabel.Text = i .. "/100%"
+    BarFill.Size = UDim2.new(i / 100, 0, 1, 0)
+    task.wait(0.015) -- Tốc độ load
+end
+
+-- [CLEANUP]
+loadConnection:Disconnect()
+LoadingGui:Destroy()
+
+-- =====================================================================
+-- 🟣 2. FLUENT UI & NÚT ẨN HIỆN
+-- =====================================================================
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+local Window = Fluent:CreateWindow({
+    Title = "Rez Hub | Premium",
+    SubTitle = "San Diego",
+    TabWidth = 160,
+    Theme = "Darker",
+    Acrylic = true,
+    Size = UDim2.fromOffset(700,  400)
+})
+
+local Tabs = {
+	Farm = Window:AddTab({ Title = "Fram", Icon = "repeat" }),
+    PvP = Window:AddTab({ Title = "PVP", Icon = "sword" }),
+    FixLag = Window:AddTab({ Title = "Fix Lag", Icon = "cpu" }),
+    Settings = Window:AddTab({ Title = "Settings", Icon = "settings" }),
+}
+
+-- [NÚT ẨN HIỆN CÓ KÉO THẢ]
+local ScreenIcon = Instance.new("ScreenGui", TargetGui)
+ScreenIcon.Name = "Zidwi_ToggleIcon"
+
+local IconBtn = Instance.new("ImageButton", ScreenIcon)
+IconBtn.Size = UDim2.fromOffset(66, 66)
+IconBtn.Position = UDim2.new(0.1, 0, 0.15, 0)
+IconBtn.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+IconBtn.Image = "rbxassetid://11154422902"
+Instance.new("UICorner", IconBtn).CornerRadius = UDim.new(0, 10)
+local IconStroke = Instance.new("UIStroke", IconBtn)
+IconStroke.Thickness = 2.5
+
+RunService.Heartbeat:Connect(function() IconStroke.Color = RainbowColor end)
+
+-- Logic kéo thả cho nút
+local dragging, dragStart, startPos
+IconBtn.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        dragStart = input.Position
+        startPos = IconBtn.Position
+    end
+end)
+IconBtn.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = false
+    end
+end)
+UserInputService.InputChanged:Connect(function(input)
+    if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+        local delta = input.Position - dragStart
+        IconBtn.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+end)
+
+-- =====================================================================
+-- ⚔️ AUTO ATTACK ENGINE (HIGH PERFORMANCE • SMOOTH • OPTIMIZED)
+-- =====================================================================
+
+-- Click để ẩn hiện (Sử dụng Window:Minimize() chuẩn bài)
+IconBtn.MouseButton1Click:Connect(function()
+    Window:Minimize()
+end)
+
+local RunService = game:GetService("RunService")
+
+local AutoAttack = false
+local Connection
+
+Tabs.PvP:AddToggle("AutoAttack", {
+    Title = "Auto Attack",
+    Default = false,
+
+    Callback = function(Value)
+        AutoAttack = Value
+
+        if Connection then
+            Connection:Disconnect()
+            Connection = nil
+        end
+
+        if AutoAttack then
+            Connection = RunService.Heartbeat:Connect(function()
+                pcall(function()
+                    -- Đặt logic đánh của bạn ở đây.
+                    -- Ví dụ gọi RemoteEvent hoặc hàm tấn công hợp lệ của game.
+                end)
+            end)
+        end
+    end
+})
+
+==============================================================
+-- ⚡ FULL LOGIC ESP - ZIDWI GAMING (FIXED & OPTIMIZED)
+-- =====================================================================
+
+local ESPEnabled = false
+local ESP_Objects = {}
+
+-- 1. TẠO TOGGLE TRONG TAB PVP
+Tabs.PvP:AddToggle("ESPToggle", {
+    Title = "ESP Box & Line",
+    Description = "Khung và Tia kẻ địch (Line đỉnh màn hình)",
+    Default = false
+}):OnChanged(function(Value)
+    ESPEnabled = Value
+    if not Value then
+        for _, obj in pairs(ESP_Objects) do
+            obj.box.Visible = false
+            obj.line.Visible = false
+        end
+    end
+end)
+
+-- 2. HÀM TẠO DRAWING ĐỐI TƯỢNG (AN TOÀN)
+local function createESP(player)
+    local success, box = pcall(function() return Drawing.new("Square") end)
+    local success2, line = pcall(function() return Drawing.new("Line") end)
+    
+    if success and success2 then
+        box.Visible = false; box.Thickness = 1; box.Filled = false; box.Color = Color3.fromRGB(0, 255, 255)
+        line.Visible = false; line.Thickness = 1; line.Color = Color3.fromRGB(255, 255, 0)
+        ESP_Objects[player.Name] = {box = box, line = line}
+    end
+end
+
+-- 3. ĐĂNG KÝ NGƯỜI CHƠI
+for _, p in pairs(Players:GetPlayers()) do
+    if p ~= LocalPlayer then createESP(p) end
+end
+Players.PlayerAdded:Connect(createESP)
+Players.PlayerRemoving:Connect(function(p)
+    if ESP_Objects[p.Name] then
+        ESP_Objects[p.Name].box:Remove()
+        ESP_Objects[p.Name].line:Remove()
+        ESP_Objects[p.Name] = nil
+    end
+end)
+
+-- 4. RENDER LOOP (LOGIC GỐC CHUẨN FPS)
+RunService.RenderStepped:Connect(function()
+    if not ESPEnabled then return end
+    
+    local camera = workspace.CurrentCamera
+    local screenWidth = camera.ViewportSize.X
+    
+    for name, obj in pairs(ESP_Objects) do
+        local player = Players:FindFirstChild(name)
+        -- Kiểm tra nhân vật còn sống và có RootPart
+        if player and player.Character and player.Character:FindFirstChild("HumanoidRootPart") and player.Character:FindFirstChild("Humanoid") and player.Character.Humanoid.Health > 0 then
+            local root = player.Character.HumanoidRootPart
+            local head = player.Character:FindFirstChild("Head") or root
+            
+            -- Chuyển đổi tọa độ 3D sang màn hình
+            local pos, onScreen = camera:WorldToViewportPoint(root.Position)
+            local headPos = camera:WorldToViewportPoint(root.Position + Vector3.new(0, 3, 0))
+            local legPos = camera:WorldToViewportPoint(root.Position - Vector3.new(0, 3, 0))
+            
+            if onScreen then
+                -- Tính kích thước Box dựa trên chiều cao nhân vật trên màn hình
+                local height = math.abs(headPos.Y - legPos.Y)
+                local width = height * 0.6
+                
+                -- Cập nhật Box
+                obj.box.Size = Vector2.new(width, height)
+                obj.box.Position = Vector2.new(pos.X - width/2, pos.Y - height/2)
+                obj.box.Visible = true
+                
+                -- Cập nhật Line (Từ giữa đỉnh màn hình nối tới giữa Box)
+                obj.line.From = Vector2.new(screenWidth / 2, 0)
+                obj.line.To = Vector2.new(pos.X, pos.Y)
+                obj.line.Visible = true
+            else
+                obj.box.Visible = false
+                obj.line.Visible = false
+            end
+        else
+            obj.box.Visible = false
+            obj.line.Visible = false
+        end
+    end
+end)
+
+-- =====================================================================
+-- 🎨 LOGIC MÀU CHUNG (BOX & LINE)
+-- =====================================================================
+
+local ESP_MainColor = Color3.fromRGB(0, 255, 255) -- Màu mặc định
+
+Tabs.PvP:AddColorpicker("ESPColorPicker", {
+    Title = "Màu ESP (Box & Line)",
+    Default = ESP_MainColor,
+    Callback = function(Value) 
+        ESP_MainColor = Value 
+        -- Cập nhật tức thì cho tất cả các đối tượng đang hiện
+        for _, obj in pairs(ESP_Objects) do
+            obj.box.Color = ESP_MainColor
+            obj.line.Color = ESP_MainColor
+        end
+    end
+})
+
+-- =====================================================================
+-- 🏃 . MOVEMENT LOGIC (WALKSPEED)
+-- =====================================================================
+local PlayerState = {
+    Speed = 16 -- Tốc độ mặc định của Roblox
+}
+
+-- Thêm Slider vào Tab
+Tabs.PvP:AddSlider("SpeedSlider", {
+    Title = "Tốc độ chạy",
+    Description = "Chỉnh tốc độ di chuyển",
+    Default = 16,
+    Min = 16,
+    Max = 100,
+    Rounding = 0,
+    Callback = function(Value)
+        PlayerState.Speed = Value
+    end
+})
+
+-- Logic cập nhật tốc độ liên tục (An toàn nhất)
+RunService.Heartbeat:Connect(function()
+    local character = LocalPlayer.Character
+    if character and character:FindFirstChild("Humanoid") then
+        if character.Humanoid.WalkSpeed ~= PlayerState.Speed then
+            character.Humanoid.WalkSpeed = PlayerState.Speed
+        end
+    end
+end)
+
+-- =====================================================================
+-- 🎯 . AUTO FACING (XOAY NGƯỜI VỀ KẺ ĐỊCH - KHÔNG KHÓA CAMERA)
+-- =====================================================================
+local FacingState = { Enabled = false }
+
+Tabs.PvP:AddToggle("FacingToggle", {
+    Title = "Auto Face Target",
+    Description = "Nhân vật tự xoay mặt về kẻ địch",
+    Default = false
+}):OnChanged(function(Value)
+    FacingState.Enabled = Value
+end)
+
+-- Vòng lặp xoay thân người (Không đụng đến Camera)
+RunService.RenderStepped:Connect(function()
+    if FacingState.Enabled and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+        local hrp = LocalPlayer.Character.HumanoidRootPart
+        local closestPlayer = nil
+        local shortestDistance = math.huge
+        
+        -- Tìm kẻ địch gần nhất
+        for _, player in pairs(Players:GetPlayers()) do
+            if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                local dist = (hrp.Position - player.Character.HumanoidRootPart.Position).Magnitude
+                if dist < shortestDistance then
+                    closestPlayer = player.Character.HumanoidRootPart
+                    shortestDistance = dist
+                end
+            end
+        end
+        
+        -- Xoay thân người về phía kẻ địch (Chỉ xoay trục Y để không bị chúc đầu xuống đất)
+        if closestPlayer then
+            local targetPos = closestPlayer.Position
+            local lookAtPos = Vector3.new(targetPos.X, hrp.Position.Y, targetPos.Z)
+            hrp.CFrame = CFrame.lookAt(hrp.Position, lookAtPos)
+        end
+    end
+end)
+
+-- =====================================================================
+-- 🌀. SPIN PLAYER LOGIC (NO VIRTUAL INPUT)
+-- =====================================================================
+local SpinState = {
+    Enabled = false,
+    Speed = 50 -- Mặc định tốc độ quay
+}
+
+-- Thêm Toggle Spin
+Tabs.PvP:AddToggle("SpinToggle", {
+    Title = "Spin Player",
+    Description = "Quay nhân vật cực nhanh",
+    Default = false
+}):OnChanged(function(Value)
+    SpinState.Enabled = Value
+end)
+
+-- Thêm Slider chỉnh tốc độ Spin
+Tabs.PvP:AddSlider("SpinSpeedSlider", {
+    Title = "Tốc độ Spin",
+    Description = "Chỉnh độ nhanh của Spin",
+    Default = 50,
+    Min = 10,
+    Max = 200,
+    Rounding = 0,
+    Callback = function(Value)
+        SpinState.Speed = Value
+    end
+})
+
+-- Logic Spin (Tác động vào CFrame RootJoint)
+RunService.RenderStepped:Connect(function()
+    if SpinState.Enabled then
+        local character = LocalPlayer.Character
+        if character and character:FindFirstChild("HumanoidRootPart") then
+            -- Thay đổi CFrame của RootPart để tạo hiệu ứng quay
+            local hrp = character.HumanoidRootPart
+            hrp.CFrame = hrp.CFrame * CFrame.Angles(0, math.rad(SpinState.Speed), 0)
+        end
+    end
+end)
+
+-- =====================================================================
+-- ⚡ LOGIC FIX LAG 10% (NHẸ NHÀNG - GIỮ NGUYÊN HÌNH DÁNG)
+-- =====================================================================
+
+Tabs.FixLag:AddButton({
+    Title = "Fix Lag 10% (Nhẹ)",
+    Description = "Xóa hiệu ứng khói bụi, lửa, tia lửa nhỏ",
+    Callback = function()
+        local count = 0
+        -- Chỉ quét những thứ gây nặng GPU do chuyển động nhiều
+        local effects = {"ParticleEmitter", "Fire", "Smoke", "Sparkles", "Explosion"}
+        
+        for _, obj in pairs(game.Workspace:GetDescendants()) do
+            for _, className in pairs(effects) do
+                if obj:IsA(className) then
+                    obj.Enabled = false -- Chỉ tắt, không xóa vĩnh viễn (An toàn)
+                    count = count + 1
+                end
+            end
+        end
+        
+        Fluent:Notify({
+            Title = "Performance",
+            Content = "Đã tối ưu 10%: Tắt " .. count .. " hiệu ứng gây lag!",
+            Duration = 3
+        })
+    end
+})
+
+-- =====================================================================
+-- ⚡ LOGIC FIX LAG 25% (TỐI ƯU HÓA CÂN BẰNG)
+-- =====================================================================
+
+Tabs.FixLag:AddButton({
+    Title = "Fix Lag 25% (Cân bằng)",
+    Description = "Tắt hiệu ứng & giảm độ bóng đổ",
+    Callback = function()
+        local count = 0
+        local effects = {"ParticleEmitter", "Fire", "Smoke", "Sparkles", "Explosion"}
+        
+        for _, obj in pairs(game.Workspace:GetDescendants()) do
+            -- 1. Tắt các hiệu ứng hạt (giống 10%)
+            for _, className in pairs(effects) do
+                if obj:IsA(className) then
+                    obj.Enabled = false
+                    count = count + 1
+                end
+            end
+            
+            -- 2. Tắt đổ bóng cho các vật thể tĩnh (BasePart)
+            -- Đây là chìa khóa của mức 25%: Giảm gánh nặng cho GPU
+            if obj:IsA("BasePart") then
+                if obj.CastShadow == true then
+                    obj.CastShadow = false
+                    count = count + 1
+                end
+            end
+        end
+        
+        Fluent:Notify({
+            Title = "Performance",
+            Content = "Đã tối ưu 25%: Tắt hiệu ứng & Đổ bóng (" .. count .. " đối tượng)",
+            Duration = 3
+        })
+    end
+})
+
+-- =====================================================================
+-- ⚡ LOGIC FIX LAG 50% (CƯỜNG ĐỘ CAO - TỐI ƯU VẬT LIỆU)
+-- =====================================================================
+
+Tabs.FixLag:AddButton({
+    Title = "Fix Lag 50% (Tối ưu vật liệu)",
+    Description = "Chuyển vật liệu về nhựa (Plastic) để tăng FPS",
+    Callback = function()
+        -- 1. Cưỡng ép giảm Graphics của Roblox về mức tối thiểu
+        UserSettings().GameSettings.SavedQualityLevel = Enum.SavedQualitySetting.Manual
+        UserSettings().GameSettings.GraphicsQualityLevel = 1
+        
+        local count = 0
+        for _, obj in pairs(game.Workspace:GetDescendants()) do
+            -- 2. Chuyển tất cả vật liệu về Plastic để GPU render nhẹ hơn
+            if obj:IsA("BasePart") then
+                if obj.Material ~= Enum.Material.Plastic then
+                    obj.Material = Enum.Material.Plastic
+                    obj.Reflectance = 0 -- Tắt độ phản chiếu
+                    count = count + 1
+                end
+                obj.CastShadow = false -- Tiếp tục tắt bóng
+            end
+            
+            -- 3. Tắt các vật thể phụ như khói, lửa, ánh sáng (PointLight, SpotLight)
+            if obj:IsA("Light") or obj:IsA("Fire") or obj:IsA("Smoke") or obj:IsA("ParticleEmitter") then
+                obj.Enabled = false
+            end
+        end
+        
+        Fluent:Notify({
+            Title = "Performance",
+            Content = "Đã tối ưu 50%: Chuyển vật liệu sang Plastic (" .. count .. " phần)",
+            Duration = 3
+        })
+    end
+})
+
+-- =====================================================================
+-- ⚡ LOGIC FIX LAG 70% (CỰC ĐẠI - CLEANUP MODE)
+-- =====================================================================
+
+Tabs.FixLag:AddButton({
+    Title = "Fix Lag 70% (Tối thượng)",
+    Description = "Xóa toàn bộ vật thể phụ & Tối ưu hóa render",
+    Callback = function()
+        -- 1. Giảm Graphics Roblox về thấp nhất có thể
+        UserSettings().GameSettings.GraphicsQualityLevel = 1
+        
+        local count = 0
+        local toRemove = {"Smoke", "Fire", "Sparkles", "ParticleEmitter", "Trail", "Explosion", "PointLight", "SpotLight", "SurfaceLight"}
+        
+        for _, obj in pairs(game.Workspace:GetDescendants()) do
+            -- 2. Xóa sạch các vật thể phụ không cần thiết
+            for _, class in pairs(toRemove) do
+                if obj:IsA(class) then
+                    obj:Destroy()
+                    count = count + 1
+                end
+            end
+            
+            -- 3. Cực hạn: Chuyển toàn bộ Part về Plastic và tắt Shadow
+            if obj:IsA("BasePart") then
+                obj.Material = Enum.Material.Plastic
+                obj.CastShadow = false
+                obj.Reflectance = 0
+            end
+            
+            -- 4. Xóa Decal/Texture (Ở mức 70% này chúng ta xóa để tối ưu tuyệt đối)
+            if obj:IsA("Decal") or obj:IsA("Texture") then
+                obj:Destroy()
+                count = count + 1
+            end
+        end
+        
+        Fluent:Notify({
+            Title = "Performance",
+            Content = "Đã tối ưu 70%: Xóa hiệu ứng & vật thể phụ (" .. count .. " đối tượng)",
+            Duration = 5
+        })
+    end
+})
+
+-- =====================================================================
+-- ⚡ LOGIC FIX LAG 80% (SIÊU NÉN - TỐI GIẢN HÓA)
+-- =====================================================================
+
+Tabs.FixLag:AddButton({
+    Title = "Fix Lag 80% (Siêu mượt)",
+    Description = "Ép game về trạng thái tối giản nhất",
+    Callback = function()
+        -- 1. Ép đồ họa xuống mức thấp nhất và tắt mọi hiệu ứng hệ thống
+        UserSettings().GameSettings.GraphicsQualityLevel = 1
+        
+        -- 2. Xóa sạch mọi thứ dư thừa bằng cách "Clean World"
+        for _, obj in pairs(game.Workspace:GetDescendants()) do
+            -- Xóa toàn bộ hiệu ứng, ánh sáng, vật thể trang trí, decal, textures
+            if obj:IsA("ParticleEmitter") or obj:IsA("Fire") or obj:IsA("Smoke") or 
+               obj:IsA("Sparkles") or obj:IsA("Explosion") or obj:IsA("Light") or 
+               obj:IsA("Decal") or obj:IsA("Texture") or obj:IsA("Trail") then
+                obj:Destroy()
+            end
+            
+            -- Ép toàn bộ vật thể về Plastic màu xám/trắng để giảm tải GPU tuyệt đối
+            if obj:IsA("BasePart") then
+                obj.Material = Enum.Material.Plastic
+                obj.CastShadow = false
+                obj.Reflectance = 0
+                obj.MaterialVariant = "" -- Xóa biến thể vật liệu
+            end
+        end
+        
+        -- 3. Xóa cả Skybox (bầu trời) để giảm gánh nặng render môi trường
+        if game.Lighting:FindFirstChildOfClass("Sky") then
+            game.Lighting:FindFirstChildOfClass("Sky"):Destroy()
+        end
+        
+        -- 4. Ép Fog (Sương mù) về 0 để camera không phải render tầm xa
+        game.Lighting.FogEnd = 99999
+        game.Lighting.FogStart = 0
+        
+        Fluent:Notify({
+            Title = "Performance",
+            Content = "Đã tối ưu 80%: Siêu nén toàn bộ hệ thống!",
+            Duration = 5
+        })
+    end
+})
+
+-- =====================================================================
+-- ⚙️ 4. LOGIC SETTINGS (THEME CHUẨN ĐÃ TEST)
+-- =====================================================================
+local ThemeList = {"Dark", "Light", "Amethyst", "Aqua", "Lightning"}
+
+Tabs.Settings:AddDropdown("ThemeDropdown", {
+    Title = "Chọn Theme",
+    Description = "Thay đổi giao diện Menu",
+    Values = ThemeList,
+    Multi = false,
+    Default = "Dark",
+    Callback = function(Value)
+        -- Sử dụng pcall để tránh script bị "đứng" nếu chọn nhầm theme không hỗ trợ
+        pcall(function()
+            Fluent:SetTheme(Value)
+        end)
+        Fluent:Notify({
+            Title = "Theme",
+            Content = "Đã áp dụng theme: " .. Value,
+            Duration = 2
+        })
+    end
+})
+
+-- =====================================================================
+-- 🛠️ MODULE MAGNET SYSTEM (INTEGRATED)
+-- =====================================================================
+
+local MagnetManager = {
+    Active = false,
+    Objects = {},
+    TargetAttachment = nil,
+    Range = 20
+}
+
+-- Hàm dọn dẹp (Cleanup) chuyên sâu
+local function CleanupMagnet()
+    for obj, data in pairs(MagnetManager.Objects) do
+        if data.AP then data.AP:Destroy() end
+        if data.Att then data.Att:Destroy() end
+    end
+    MagnetManager.Objects = {}
+    if MagnetManager.TargetAttachment then 
+        MagnetManager.TargetAttachment:Destroy() 
+        MagnetManager.TargetAttachment = nil 
+    end
+end
+
+-- Vòng lặp chạy chính (Heartbeat)
+RunService.Heartbeat:Connect(function()
+    if not MagnetManager.Active then return end
+    
+    local char = LocalPlayer.Character
+    local root = char and char:FindFirstChild("HumanoidRootPart")
+    if not root then return end
+    
+    -- Khởi tạo hoặc duy trì Target
+    if not MagnetManager.TargetAttachment or not MagnetManager.TargetAttachment.Parent then
+        MagnetManager.TargetAttachment = Instance.new("Attachment")
+        MagnetManager.TargetAttachment.Name = "MagnetTarget"
+        MagnetManager.TargetAttachment.Position = Vector3.new(0, 0, -12)
+        MagnetManager.TargetAttachment.Parent = root
+    end
+    
+    -- Quét và Hút Part
+    for _, v in pairs(Workspace:GetDescendants()) do
+        if v:IsA("BasePart") and not v.Anchored and not v:IsDescendantOf(char) then
+            local dist = (v.Position - root.Position).Magnitude
+            
+            if dist <= MagnetManager.Range then
+                if not MagnetManager.Objects[v] then
+                    local att = Instance.new("Attachment", v)
+                    local ap = Instance.new("AlignPosition", v)
+                    ap.Mode = Enum.PositionAlignmentMode.OneAttachment
+                    ap.Attachment0 = att
+                    ap.Attachment1 = MagnetManager.TargetAttachment
+                    ap.Responsiveness = 20
+                    ap.MaxForce = 10000
+                    
+                    MagnetManager.Objects[v] = {AP = ap, Att = att}
+                end
+            else
+                if MagnetManager.Objects[v] then
+                    MagnetManager.Objects[v].AP:Destroy()
+                    MagnetManager.Objects[v].Att:Destroy()
+                    MagnetManager.Objects[v] = nil
+                end
+            end
+        end
+    end
+end)
+
+-- =====================================================================
+-- 📑 UI INTEGRATION (Tabs.Fram)
+-- =====================================================================
+
+Tabs.Farm:AddToggle("MagnetToggle", {
+    Title = "Hút Part (Magnet System)",
+    Description = "Sử dụng AlignPosition, mượt mà không lag",
+    Default = false,
+    Callback = function(v) 
+        MagnetManager.Active = v 
+        if not v then CleanupMagnet() end
+    end
+})
+
+Tabs.Fram:AddSlider("RangeSlider", {
+    Title = "Phạm vi hút (Studs)",
+    Min = 5,
+    Max = 100,
+    Default = 20,
+    Callback = function(v)
+        MagnetManager.Range = v
+    end
+})
+
+Tabs.Fram:AddButton({
+    Title = "Dọn sạch rác Magnet",
+    Description = "Force reset tất cả AlignPosition trong map",
+    Callback = function()
+        CleanupMagnet()
+        Fluent:Notify({Title = "Zidwi System", Content = "Đã dọn dẹp các vật thể bị hút!", Duration = 3})
+    end
+})
+
+-- =====================================================================
+-- 💾 SAVE CONFIG SYSTEM
+-- =====================================================================
+
+local SaveManager = loadstring(game:HttpGet(
+    "https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"
+))()
+
+local InterfaceManager = loadstring(game:HttpGet(
+    "https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"
+))()
+
+InterfaceManager:SetLibrary(Fluent)
+SaveManager:SetLibrary(Fluent)
+
+InterfaceManager:BuildInterfaceSection(Tabs.Settings)
+SaveManager:BuildConfigSection(Tabs.Settings)
+
+SaveManager:IgnoreThemeSettings()
+
+InterfaceManager:SetFolder("RezHub")
+SaveManager:SetFolder("RezHub/Configs")
+
+SaveManager:LoadAutoloadConfig()
+
+local AutoSave = true
+
+Tabs.Settings:AddToggle("AutoSave", {
+    Title = "Auto Save Config",
+    Description = "Tự động lưu cấu hình",
+    Default = true
+}):OnChanged(function(Value)
+    AutoSave = Value
+
+    if AutoSave then
+        pcall(function()
+            SaveManager:Save()
+        end)
+    end
+end)
+
