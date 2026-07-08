@@ -15,8 +15,8 @@ local TargetGui=CoreGui;local success=pcall(function()local _=CoreGui.Name end)i
 
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
 local Window = Fluent:CreateWindow({
-    Title = "ZIDWI GAMING | Free",
-    SubTitle = "by khang",
+    Title = "REZ Hub | Free",
+    SubTitle = "Premuim | Free",
     TabWidth = 160,
     Theme = "Darker",
     Size = UDim2.fromOffset(700,  400)
@@ -759,181 +759,80 @@ Tabs.Settings:AddDropdown("ThemeDropdown", {
 --📦 TAB BRING
 --=======================================================================
 
-Tabs.Bring = Window:AddTab({ 
-    Title = "Bring", 
-    Icon = "package" 
-})
+-- bring
 
--- ==================== BRING VARIABLES ====================
 local junkItems = {"Tyre", "Bolt", "Broken Fan", "Broken Microwave", "Sheet Metal", "Old Radio", "Washing Machine", "Old Car Engine"}
 local selectedJunkItems = {}
-
 local fuelItems = {"Log", "Chair", "Coal", "Fuel Canister", "Oil Barrel"}
 local selectedFuelItems = {}
+local foodItems = {"Cake", "Cooked Steak", "Cooked Morsel", "Steak", "Morsel", "Berry", "Carrot"}
+local selectedFoodItems = {}
+local medicalItems = {"Bandage", "MedKit"}
+local selectedMedicalItems = {}
+local equipmentItems = {"Revolver", "Rifle", "Leather Body", "Iron Body", "Revolver Ammo", "Rifle Ammo", "Giant Sack", "Good Sack", "Strong Axe", "Good Axe"}
+local selectedEquipmentItems = {}
+
+Tabs.Bring:AddSection({ Title = "Junk", Icon = "box" })
+
+Tabs.Bring:AddDropdown({
+    Title = "Select Junk Items",
+    Desc = "Choose items to bring",
+    Values = junkItems,
+    Multi = true,
+    AllowNone = true,
+    Callback = function(options)
+        selectedJunkItems = options
+    end
+})
+
+Tabs.Bring:AddButton({
+    Title = "Bring Junk Items",
+    Locked = false,
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then return end
+        local hrp = player.Character.HumanoidRootPart
+        local targetPos = hrp.Position + Vector3.new(2, 0, 0)
+        for _, itemName in ipairs(selectedJunkItems) do
+            for _, item in ipairs(workspace:GetDescendants()) do
+                if item.Name == itemName and (item:IsA("BasePart") or item:IsA("Model")) and (item.PrimaryPart or item:FindFirstChildWhichIsA("BasePart")) then
+                    moveItemToPos(item, targetPos)
+                end
+            end
+        end
+    end
+})
+
+Tabs.Bring:AddSection({ Title = "Food", Icon = "utensils" })
 
 local foodItems = {"Cake", "Cooked Steak", "Cooked Morsel", "Steak", "Morsel", "Berry", "Carrot"}
 local selectedFoodItems = {}
 
-local medicalItems = {"Bandage", "MedKit"}
-local selectedMedicalItems = {}
-
-local equipmentItems = {"Revolver", "Rifle", "Leather Body", "Iron Body", "Revolver Ammo", "Rifle Ammo", "Giant Sack", "Good Sack", "Strong Axe", "Good Axe"}
-local selectedEquipmentItems = {}
-
--- ==================== BRING UI ====================
-Tabs.Bring:Section({ Title = "Junk Items", Icon = "trash" })
-
-Tabs.Bring:Dropdown({
-    Title = "Chọn Junk Items",
-    Values = junkItems,
-    Multi = true,
-    AllowNone = true,
-    Callback = function(values)
-        selectedJunkItems = values
-    end
-})
-
-Tabs.Bring:Button({
-    Title = "Bring Junk Items",
-    Callback = function()
-        BringItems(selectedJunkItems)
-    end
-})
-
--- Fuel
-Tabs.Bring:Section({ Title = "Fuel Items", Icon = "flame" })
-
-Tabs.Bring:Dropdown({
-    Title = "Chọn Fuel Items",
-    Values = fuelItems,
-    Multi = true,
-    AllowNone = true,
-    Callback = function(values)
-        selectedFuelItems = values
-    end
-})
-
-Tabs.Bring:Button({
-    Title = "Bring Fuel Items",
-    Callback = function()
-        BringItems(selectedFuelItems)
-    end
-})
-
--- Food
-Tabs.Bring:Section({ Title = "Food Items", Icon = "utensils" })
-
-Tabs.Bring:Dropdown({
-    Title = "Chọn Food Items",
+Tabs.Bring:AddDropdown({
+    Title = "Select Food Items",
+    Desc = "Choose items to bring",
     Values = foodItems,
     Multi = true,
     AllowNone = true,
-    Callback = function(values)
-        selectedFoodItems = values
+    Callback = function(options)
+        selectedFoodItems = options
     end
 })
 
-Tabs.Bring:Button({
+Tabs.Bring:AddButton({
     Title = "Bring Food Items",
+    Locked = false,
     Callback = function()
-        BringItems(selectedFoodItems)
-    end
-})
-
--- Medical
-Tabs.Bring:Section({ Title = "Medical Items", Icon = "heart" })
-
-Tabs.Bring:Dropdown({
-    Title = "Chọn Medical Items",
-    Values = medicalItems,
-    Multi = true,
-    AllowNone = true,
-    Callback = function(values)
-        selectedMedicalItems = values
-    end
-})
-
-Tabs.Bring:Button({
-    Title = "Bring Medical Items",
-    Callback = function()
-        BringItems(selectedMedicalItems)
-    end
-})
-
--- Equipment
-Tabs.Bring:Section({ Title = "Equipment Items", Icon = "sword" })
-
-Tabs.Bring:Dropdown({
-    Title = "Chọn Equipment Items",
-    Values = equipmentItems,
-    Multi = true,
-    AllowNone = true,
-    Callback = function(values)
-        selectedEquipmentItems = values
-    end
-})
-
-Tabs.Bring:Button({
-    Title = "Bring Equipment Items",
-    Callback = function()
-        BringItems(selectedEquipmentItems)
-    end
-})
-
--- Quick Bring All
-Tabs.Bring:Section({ Title = "Quick Bring", Icon = "zap" })
-
-Tabs.Bring:Button({
-    Title = "Bring All Selected Items",
-    Callback = function()
-        local allItems = {}
-        for _, v in ipairs(selectedJunkItems) do table.insert(allItems, v) end
-        for _, v in ipairs(selectedFuelItems) do table.insert(allItems, v) end
-        for _, v in ipairs(selectedFoodItems) do table.insert(allItems, v) end
-        for _, v in ipairs(selectedMedicalItems) do table.insert(allItems, v) end
-        for _, v in ipairs(selectedEquipmentItems) do table.insert(allItems, v) end
-        
-        BringItems(allItems)
-    end
-})
-
-local function BringItems(itemList)
-    if #itemList == 0 then 
-        Fluent:Notify({
-            Title = "Bring System",
-            Content = "Bạn chưa chọn item nào!",
-            Duration = 3
-        })
-        return 
-    end
-
-    local character = LocalPlayer.Character
-    if not character or not character:FindFirstChild("HumanoidRootPart") then 
-        Fluent:Notify({Title = "Bring", Content = "Chưa load character!", Duration = 3})
-        return 
-    end
-
-    local hrp = character.HumanoidRootPart
-    local targetPos = hrp.Position + Vector3.new(3, 0, 0)
-
-    Fluent:Notify({
-        Title = "Bring System",
-        Content = "Đang kéo " .. #itemList .. " items...",
-        Duration = 4
-    })
-
-    for _, itemName in ipairs(itemList) do
-        for _, item in ipairs(workspace.Items:GetChildren()) do
-            if item.Name == itemName then
-                moveItemToPos(item, targetPos)
-                task.wait(0.07)
+        local player = game.Players.LocalPlayer
+        if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then return end
+        local hrp = player.Character.HumanoidRootPart
+        local targetPos = hrp.Position + Vector3.new(2, 0, 0)
+        for _, itemName in ipairs(selectedFoodItems) do
+            for _, item in ipairs(workspace:GetDescendants()) do
+                if item.Name == itemName and (item:IsA("BasePart") or item:IsA("Model")) and (item.PrimaryPart or item:FindFirstChildWhichIsA("BasePart")) then
+                    moveItemToPos(item, targetPos)
+                end
             end
         end
     end
-
-    Fluent:Notify({
-        Title = "Bring System",
-        Content = "Đã kéo xong tất cả items!",
-        Duration = 3
-    })
-end
+})
