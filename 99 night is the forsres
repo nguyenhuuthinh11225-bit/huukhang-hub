@@ -1,4 +1,3 @@
-
 repeat task.wait() until game:IsLoaded()
 
 local Players = game:GetService("Players")
@@ -8,27 +7,30 @@ local CoreGui = game:GetService("CoreGui")
 local LocalPlayer = Players.LocalPlayer
 local Workspace = game:GetService("Workspace")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local LocalPlayer = Players.LocalPlayer
+local Lighting = game:GetService("Lighting")
 
 local TargetGui=CoreGui;local success=pcall(function()local _=CoreGui.Name end)if not success then TargetGui=LocalPlayer:WaitForChild("PlayerGui")end;local RainbowColor=Color3.fromRGB(255,0,0)task.spawn(function()local hue=0;while true do hue=(hue+0.005)%1;RainbowColor=Color3.fromHSV(hue,1,1)task.wait(0.02)end end)local LoadingGui=Instance.new("ScreenGui",TargetGui)LoadingGui.Name="Rez Hub_LoadingScreen"local LoadFrame=Instance.new("Frame",LoadingGui)LoadFrame.Size=UDim2.fromOffset(500,200)LoadFrame.Position=UDim2.new(0.5,-250,0.5,-100)LoadFrame.BackgroundColor3=Color3.fromRGB(15,15,15)Instance.new("UICorner",LoadFrame).CornerRadius=UDim.new(0,15)local LoadStroke=Instance.new("UIStroke",LoadFrame)LoadStroke.Thickness=5;local TitleLabel=Instance.new("TextLabel",LoadFrame)TitleLabel.Size=UDim2.new(1,0,0.3,0)TitleLabel.Position=UDim2.fromOffset(0,30)TitleLabel.BackgroundTransparency=1;TitleLabel.Text="RezHub xin chào bro "..LocalPlayer.Name;TitleLabel.Font=Enum.Font.SourceSansBold;TitleLabel.TextSize=30;TitleLabel.TextColor3=Color3.new(1,1,1)local PercentLabel=Instance.new("TextLabel",LoadFrame)PercentLabel.Size=UDim2.new(0.8,0,0.2,0)PercentLabel.Position=UDim2.new(0.1,0,0.45,0)PercentLabel.BackgroundTransparency=1;PercentLabel.Text="0/100%"PercentLabel.Font=Enum.Font.SourceSansBold;PercentLabel.TextColor3=Color3.new(1,1,1)PercentLabel.TextScaled=true;PercentLabel.TextXAlignment=Enum.TextXAlignment.Center;PercentLabel.TextYAlignment=Enum.TextYAlignment.Center;local BarBG=Instance.new("Frame",LoadFrame)BarBG.Size=UDim2.new(0.85,0,0,20)BarBG.Position=UDim2.new(0.075,0,0.7,0)BarBG.BackgroundColor3=Color3.fromRGB(30,30,30)Instance.new("UICorner",BarBG)local BarFill=Instance.new("Frame",BarBG)BarFill.Size=UDim2.new(0,0,1,0)Instance.new("UICorner",BarFill)local loadConnection=RunService.Heartbeat:Connect(function()LoadStroke.Color=RainbowColor;BarFill.BackgroundColor3=RainbowColor;PercentLabel.TextColor3=RainbowColor;TitleLabel.TextColor3=RainbowColor end)for i=1,100 do PercentLabel.Text=i.."/100%"BarFill.Size=UDim2.new(i/100,0,1,0)task.wait(0.015)end;loadConnection:Disconnect()LoadingGui:Destroy()
 
 
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
 local Window = Fluent:CreateWindow({
-    Title = "REZ Hub | Free",
-    SubTitle = "Premuim | Free",
+    Title = "ZIDWI GAMING | Free",
+    SubTitle = "by khang",
     TabWidth = 160,
     Theme = "Darker",
-    Size = UDim2.fromOffset(700,  400)
+    Size = UDim2.fromOffset(700, 400)
 })
 
 local Tabs = {
-    Bring = Window:AddTab({ Title = "Bring", Icon = "package"}),
-    KillAura = Window:AddTab({ Title = "KillAura", Icon = "repeat" }),
-    Player = Window:AddTab({ Title = "PVP", Icon = "user" }),
-    FixLag = Window:AddTab({ Title = "Fix Lag", Icon = "cpu" }),
-    Settings = Window:AddTab({ Title = "Settings", Icon = "settings" }),
-    Server = Window:AddTab({ Title = "Server", Icon = "globe" }),
+    KillAura = Window:AddTab({ Title = "KillAura",  Icon = "repeat"   }),
+    Player   = Window:AddTab({ Title = "PVP",       Icon = "user"     }),
+    Bring    = Window:AddTab({ Title = "Bring",     Icon = "package"  }),
+    AutoFarm = Window:AddTab({ Title = "Auto Farm", Icon = "axe"      }),
+    Teleport = Window:AddTab({ Title = "Teleport",  Icon = "map-pin"  }),
+    Misc     = Window:AddTab({ Title = "Misc",      Icon = "sparkles" }),
+    FixLag   = Window:AddTab({ Title = "Fix Lag",   Icon = "cpu"      }),
+    Settings = Window:AddTab({ Title = "Settings",  Icon = "settings" }),
+    Server   = Window:AddTab({ Title = "Server",    Icon = "globe"    }),
 }
 
 function nut() local ScreenIcon=Instance.new("ScreenGui",TargetGui)ScreenIcon.Name="Zidwi_ToggleIcon"local IconBtn=Instance.new("ImageButton",ScreenIcon)IconBtn.Size=UDim2.fromOffset(67,67)IconBtn.Position=UDim2.new(0.1,0,0.15,0)IconBtn.BackgroundColor3=Color3.fromRGB(20,20,20)IconBtn.Image="rbxassetid://11154422902"Instance.new("UICorner",IconBtn).CornerRadius=UDim.new(0,10)local IconStroke=Instance.new("UIStroke",IconBtn)IconStroke.Thickness=2.5;RunService.Heartbeat:Connect(function()IconStroke.Color=RainbowColor end)local dragging,dragStart,startPos;IconBtn.InputBegan:Connect(function(input)if input.UserInputType==Enum.UserInputType.MouseButton1 or input.UserInputType==Enum.UserInputType.Touch then dragging=true;dragStart=input.Position;startPos=IconBtn.Position end end)IconBtn.InputEnded:Connect(function(input)if input.UserInputType==Enum.UserInputType.MouseButton1 or input.UserInputType==Enum.UserInputType.Touch then dragging=false end end)UserInputService.InputChanged:Connect(function(input)if dragging and(input.UserInputType==Enum.UserInputType.MouseMovement or input.UserInputType==Enum.UserInputType.Touch)then local delta=input.Position-dragStart;IconBtn.Position=UDim2.new(startPos.X.Scale,startPos.X.Offset+delta.X,startPos.Y.Scale,startPos.Y.Offset+delta.Y)end end)IconBtn.MouseButton1Click:Connect(function()Window:Minimize()end) end nut()
@@ -38,35 +40,23 @@ function nut() local ScreenIcon=Instance.new("ScreenGui",TargetGui)ScreenIcon.Na
 ------------------// KILLAURA //--------------------------
 ----------------------------------------------------------
 
-
-local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Workspace = game:GetService("Workspace")
-
-local LocalPlayer = Players.LocalPlayer
 local remoteEvents = ReplicatedStorage:WaitForChild("RemoteEvents")
 
--- ======================
--- 🔪 Danh sách Tool + Damage ID
--- ======================
 local toolsDamageIDs = {
-    ["Old Axe"] = "3_7367831688",
-    ["Good Axe"] = "112_7367831688",
+    ["Old Axe"]    = "3_7367831688",
+    ["Good Axe"]   = "112_7367831688",
     ["Strong Axe"] = "116_7367831688",
-    ["Chainsaw"] = "647_8992824875",
-    ["Spear"] = "196_8999010016"
+    ["Chainsaw"]   = "647_8992824875",
+    ["Spear"]      = "196_8999010016"
 }
 
--- ======================
--- ⚙️ HÀM CHUNG
--- ======================
 local function getTool(onlyChop)
     local inv = LocalPlayer:FindFirstChild("Inventory")
-    if not inv then return nil,nil end
-    for name,id in pairs(toolsDamageIDs) do
+    if not inv then return nil, nil end
+    for name, id in pairs(toolsDamageIDs) do
         if not (onlyChop and (name ~= "Old Axe" and name ~= "Good Axe" and name ~= "Strong Axe")) then
             local tool = inv:FindFirstChild(name)
-            if tool then return tool,id end
+            if tool then return tool, id end
         end
     end
 end
@@ -79,27 +69,26 @@ local function unequipTool(tool)
     if tool then remoteEvents.UnequipItemHandle:FireServer(tool) end
 end
 
--- ======================
--- 🔥 KILL AURA
--- ======================
+-- Kill Aura
 local killAuraActive = false
-local killAuraRange = 100
+local killAuraRange  = 100
 local killAuraThread
 
 local function startKillAura()
     if killAuraThread then task.cancel(killAuraThread) end
     killAuraThread = task.spawn(function()
         while killAuraActive do
-            local char,tool,id = LocalPlayer.Character,getTool(false)
+            local char = LocalPlayer.Character
+            local tool, id = getTool(false)
             local hrp = char and char:FindFirstChild("HumanoidRootPart")
             if hrp and tool and id then
                 equipTool(tool)
-                for _,mob in ipairs(Workspace.Characters:GetChildren()) do
-                    if mob:IsA("Model") and mob~=char and mob.PrimaryPart then
-                        if (mob.PrimaryPart.Position-hrp.Position).Magnitude<=killAuraRange then
+                for _, mob in ipairs(Workspace.Characters:GetChildren()) do
+                    if mob:IsA("Model") and mob ~= char and mob.PrimaryPart then
+                        if (mob.PrimaryPart.Position - hrp.Position).Magnitude <= killAuraRange then
                             task.defer(function()
                                 pcall(function()
-                                    remoteEvents.ToolDamageObject:InvokeServer(mob,tool,id,mob.PrimaryPart.CFrame)
+                                    remoteEvents.ToolDamageObject:InvokeServer(mob, tool, id, mob.PrimaryPart.CFrame)
                                 end)
                             end)
                         end
@@ -112,39 +101,36 @@ local function startKillAura()
 end
 
 Tabs.KillAura:AddToggle("KillAura", {
-    Title="Kill Aura (Multi)",
-    Default=false,
-    Description="Tấn công tất cả mob trong phạm vi",
-    Callback=function(state)
-        killAuraActive=state
-        if state then startKillAura() else
-            if killAuraThread then task.cancel(killAuraThread) killAuraThread=nil end
+    Title       = "Kill Aura (Multi)",
+    Default     = false,
+    Description = "Tấn công tất cả mob trong phạm vi",
+    Callback    = function(state)
+        killAuraActive = state
+        if state then
+            startKillAura()
+        else
+            if killAuraThread then task.cancel(killAuraThread) killAuraThread = nil end
         end
     end
 })
 
 Tabs.KillAura:AddSlider("KillAuraRange", {
-    Title="Tầm Hoạt Động",
-    Description="Khoảng cách Kill Aura",
-    Default=killAuraRange,
-    Min=10,Max=300,Rounding=1,
-    Callback=function(v) killAuraRange=tonumber(v) or 100 end
+    Title       = "Tầm Hoạt Động",
+    Description = "Khoảng cách Kill Aura",
+    Default     = killAuraRange,
+    Min = 10, Max = 300, Rounding = 1,
+    Callback    = function(v) killAuraRange = tonumber(v) or 100 end
 })
 
--- ======================
--- ⚒️ Chop Aura
--- ======================
+-- Chop Aura
+local currentammount  = 0
+local auraRadius      = 50
+local chopAuraToggle  = false
 
-local currentammount = 0
-local auraRadius = 50
-local chopAuraToggle = false
-
--- Hàm lấy tool chặt cây
 local function getAnyToolWithDamageID(onlyChop)
     local inv = LocalPlayer:FindFirstChild("Inventory")
     if not inv then return nil, nil end
-    for name,id in pairs(toolsDamageIDs) do
-        -- chỉ lấy rìu nếu onlyChop = true
+    for name, id in pairs(toolsDamageIDs) do
         if not (onlyChop and (name ~= "Old Axe" and name ~= "Good Axe" and name ~= "Strong Axe")) then
             local tool = inv:FindFirstChild(name)
             if tool then return tool, id end
@@ -179,7 +165,6 @@ local function chopAuraLoop()
                         end
                     end
                 end
-
                 for _, tree in ipairs(trees) do
                     local trunk = tree:FindFirstChild("Trunk")
                     if trunk and trunk:IsA("BasePart") and (trunk.Position - hrp.Position).Magnitude <= auraRadius then
@@ -190,10 +175,12 @@ local function chopAuraLoop()
                                 currentammount = currentammount + 1
                                 pcall(function()
                                     ReplicatedStorage:WaitForChild("RemoteEvents").ToolDamageObject:InvokeServer(
-                                        tree,
-                                        tool,
+                                        tree, tool,
                                         tostring(currentammount) .. "_7367831688",
-                                        CFrame.new(-2.962610244751, 4.5547881126404, -75.950843811035, 0.89621275663376, -1.3894891459643e-08, 0.44362446665764, -7.994568895775e-10, 1, 3.293635941759e-08, -0.44362446665764, -2.9872644802253e-08, 0.89621275663376)
+                                        CFrame.new(-2.962610244751, 4.5547881126404, -75.950843811035,
+                                            0.89621275663376, -1.3894891459643e-08, 0.44362446665764,
+                                            -7.994568895775e-10, 1, 3.293635941759e-08,
+                                            -0.44362446665764, -2.9872644802253e-08, 0.89621275663376)
                                     )
                                 end)
                                 task.wait(0.5)
@@ -211,13 +198,10 @@ local function chopAuraLoop()
     end
 end
 
-
-
 Tabs.KillAura:AddSection("Chặt Cây")
 
-
 Tabs.KillAura:AddToggle("ChopAura", {
-    Title = "Auto Chặt Cây",
+    Title   = "Auto Chặt Cây",
     Default = false,
     Callback = function(Value)
         chopAuraToggle = Value
@@ -230,183 +214,853 @@ Tabs.KillAura:AddToggle("ChopAura", {
     end
 })
 
-
 Tabs.KillAura:AddSlider("AuraRange", {
-    Title = "Tầm Aura",
+    Title       = "Tầm Aura",
     Description = "Điều chỉnh khoảng cách",
-    Default = 50,
-    Min = 10,
-    Max = 500,
-    Rounding = 0,
+    Default = 50, Min = 10, Max = 500, Rounding = 0,
     Callback = function(Value)
         auraRadius = math.clamp(Value, 10, 500)
     end
 })
 
 
-
-
-
 ----------------------------------------------------------
 ------------------// PLAYER //----------------------------
 ----------------------------------------------------------
 
+local function Plr()
+    local speedValue = 30
+    local humanoid, root = nil, nil
 
+    local function refreshChar()
+        local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+        humanoid = char:WaitForChild("Humanoid")
+        root     = char:WaitForChild("HumanoidRootPart")
+    end
+    refreshChar()
+    LocalPlayer.CharacterAdded:Connect(refreshChar)
 
+    Tabs.Player:AddSlider("SafeSpeedValue", {
+        Title = "Tốc chạy", Default = 16, Min = 16, Max = 120, Rounding = 0,
+        Callback = function(val) speedValue = val end
+    })
 
-local function  Plr()
+    RunService.RenderStepped:Connect(function(dt)
+        if not humanoid or not root then return end
+        local moveDir = humanoid.MoveDirection
+        if moveDir.Magnitude > 0 then
+            root.CFrame = root.CFrame + moveDir * (speedValue - 16) * dt
+        end
+    end)
 
-    
-local speedValue = 30
-local humanoid, root = nil, nil
+    local UIS    = game:GetService("UserInputService")
+    local Camera = workspace.CurrentCamera
+    local LP     = Players.LocalPlayer
+    local Char   = LP.Character or LP.CharacterAdded:Wait()
+    local Humanoid
+    local Conns  = {}
+    local RunSpeed, FlySpeed = 16, 60
 
-local function refreshChar()
-	local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
-	humanoid = char:WaitForChild("Humanoid")
-	root = char:WaitForChild("HumanoidRootPart")
+    local function UpdateHumanoid(c)
+        Char, Humanoid = c, c:WaitForChild("Humanoid")
+        Humanoid.WalkSpeed = RunSpeed
+    end
+    UpdateHumanoid(Char)
+    LP.CharacterAdded:Connect(UpdateHumanoid)
+
+    local function ClearConn(tag)
+        if Conns[tag] then Conns[tag]:Disconnect() Conns[tag] = nil end
+    end
+
+    Tabs.Player:AddToggle("InfJump", {
+        Title = "Nhảy Liên Tục", Default = false,
+        Callback = function(state)
+            ClearConn("InfJump")
+            if state then
+                Conns["InfJump"] = UIS.JumpRequest:Connect(function()
+                    if Humanoid then Humanoid:ChangeState("Jumping") end
+                end)
+            end
+        end
+    })
+
+    Tabs.Player:AddSlider("JumpPower", {
+        Title = "Nhảy Cao", Default = 50, Min = 50, Max = 200, Rounding = 1,
+        Callback = function(v)
+            if Humanoid then Humanoid.UseJumpPower = true Humanoid.JumpPower = v end
+        end
+    })
+
+    local flyToggle = false
+    local flySpeed  = 1
+    local FLYING    = false
+    local mfly1, mfly2
+
+    local function UnMobileFly()
+        FLYING = false
+        if mfly1 then mfly1:Disconnect() mfly1 = nil end
+        if mfly2 then mfly2:Disconnect() mfly2 = nil end
+        local char = LocalPlayer.Character
+        if char then
+            local root2 = char:FindFirstChild("HumanoidRootPart")
+            local hum   = char:FindFirstChildOfClass("Humanoid")
+            if hum then hum.PlatformStand = false end
+            if root2 then
+                if root2:FindFirstChild("BodyVelocity") then root2.BodyVelocity:Destroy() end
+                if root2:FindFirstChild("BodyGyro")     then root2.BodyGyro:Destroy()     end
+            end
+        end
+    end
+
+    local function MobileFly()
+        if FLYING then return end
+        FLYING = true
+        local char  = LocalPlayer.Character
+        local root2 = char:WaitForChild("HumanoidRootPart")
+        local controlModule = require(LocalPlayer.PlayerScripts:WaitForChild("PlayerModule"):WaitForChild("ControlModule"))
+        local bv = Instance.new("BodyVelocity", root2)
+        bv.Name = "BodyVelocity"
+        bv.MaxForce = Vector3.new(9e9, 9e9, 9e9)
+        local bg = Instance.new("BodyGyro", root2)
+        bg.Name = "BodyGyro"
+        bg.MaxTorque = Vector3.new(9e9, 9e9, 9e9)
+        bg.P = 1000
+        mfly2 = RunService.RenderStepped:Connect(function()
+            if FLYING and char and char:FindFirstChildOfClass("Humanoid") then
+                char:FindFirstChildOfClass("Humanoid").PlatformStand = true
+                bg.CFrame = workspace.CurrentCamera.CFrame
+                local direction = controlModule:GetMoveVector()
+                bv.Velocity = ((workspace.CurrentCamera.CFrame.RightVector * direction.X) +
+                    (-workspace.CurrentCamera.CFrame.LookVector * direction.Z)) * (flySpeed * 50)
+            else
+                UnMobileFly()
+            end
+        end)
+    end
+
+    Tabs.Player:AddToggle("FlyToggle", {
+        Title = "Fly (Bay)", Default = false,
+        Callback = function(state)
+            flyToggle = state
+            if state then MobileFly() else UnMobileFly() end
+        end
+    })
+
+    Tabs.Player:AddSlider("FlySpeed", {
+        Title = "Tốc độ bay", Default = 1, Min = 1, Max = 20, Rounding = 1,
+        Callback = function(value) flySpeed = value end
+    })
+
+    LP.CharacterAdded:Connect(function(c) Char = c end)
+
+    local spinEnabled = false
+    local spinAngle   = 0
+    local spinSpeed2  = 50
+
+    Tabs.Player:AddToggle("AutoSpin", {
+        Title = "Auto Xoay", Default = false,
+        Callback = function(state) spinEnabled = state end
+    })
+
+    Tabs.Player:AddSlider("SpinSpeed", {
+        Title = "Tốc độ xoay", Default = spinSpeed2, Min = 10, Max = 1000, Rounding = 0,
+        Callback = function(value) spinSpeed2 = value end
+    })
+
+    RunService.Heartbeat:Connect(function(dt)
+        local Character = LocalPlayer.Character
+        if spinEnabled and Character and Character:FindFirstChild("HumanoidRootPart") then
+            spinAngle = spinAngle + dt * spinSpeed2
+            local r   = Character.HumanoidRootPart
+            local pos = r.Position
+            r.CFrame  = CFrame.new(pos) * CFrame.Angles(0, spinAngle, 0)
+        end
+    end)
+
+    local Camera2 = workspace.CurrentCamera
+    Tabs.Player:AddSlider("CamFOV", {
+        Title = "Độ rộng camera", Default = 70, Min = 70, Max = 120, Rounding = 0,
+        Callback = function(value) Camera2.FieldOfView = value end
+    })
 end
-refreshChar()
-LocalPlayer.CharacterAdded:Connect(refreshChar)
+Plr()
 
-Tabs.Player:AddSlider("SafeSpeedValue", {
-	Title = "Tốc chạy",
-	Default = 16,
-	Min = 16,
-	Max = 120,
-	Rounding = 0,
-	Callback = function(val)
-		speedValue = val
-	end
+
+----------------------------------------------------------
+------------------// BRING //-----------------------------
+----------------------------------------------------------
+
+-- Danh sách item theo loại
+local junkItems      = {"Tyre", "Bolt", "Broken Fan", "Broken Microwave", "Sheet Metal", "Old Radio", "Washing Machine", "Old Car Engine"}
+local fuelItems      = {"Log", "Chair", "Coal", "Fuel Canister", "Oil Barrel"}
+local foodItems      = {"Cake", "Cooked Steak", "Cooked Morsel", "Steak", "Morsel", "Berry", "Carrot"}
+local medicalItems   = {"Bandage", "MedKit"}
+local equipmentItems = {"Revolver", "Rifle", "Leather Body", "Iron Body", "Revolver Ammo", "Rifle Ammo", "Giant Sack", "Good Sack", "Strong Axe", "Good Axe"}
+
+local selectedJunkItems      = {}
+local selectedFuelItems      = {}
+local selectedFoodItems      = {}
+local selectedMedicalItems   = {}
+local selectedEquipmentItems = {}
+
+-- Hàm di chuyển item về vị trí player
+local function moveItemToPos(item, position)
+    if not item or not item:IsDescendantOf(workspace) then return end
+    if not item:IsA("BasePart") and not item:IsA("Model") then return end
+    local part = item:IsA("Model") and
+        (item.PrimaryPart or item:FindFirstChildWhichIsA("BasePart") or item:FindFirstChild("Handle"))
+        or item
+    if not part or not part:IsA("BasePart") then return end
+    if item:IsA("Model") and not item.PrimaryPart then
+        pcall(function() item.PrimaryPart = part end)
+    end
+    pcall(function()
+        ReplicatedStorage:WaitForChild("RemoteEvents").RequestStartDraggingItem:FireServer(item)
+        if item:IsA("Model") then
+            item:SetPrimaryPartCFrame(CFrame.new(position))
+        else
+            part.CFrame = CFrame.new(position)
+        end
+        ReplicatedStorage:WaitForChild("RemoteEvents").StopDraggingItem:FireServer(item)
+    end)
+end
+
+-- Hàm bring item theo tên
+local function bringItemsByNames(nameList)
+    local char = LocalPlayer.Character
+    if not char or not char:FindFirstChild("HumanoidRootPart") then
+        Fluent:Notify({ Title = "Bring", Content = "Không tìm thấy nhân vật!", Duration = 2 })
+        return
+    end
+    local hrp   = char.HumanoidRootPart
+    local count = 0
+    for _, item in ipairs(workspace.Items:GetChildren()) do
+        for _, name in ipairs(nameList) do
+            if item.Name == name then
+                moveItemToPos(item, hrp.Position + Vector3.new(math.random(-2,2), 0, math.random(-2,2)))
+                count = count + 1
+                task.wait(0.05)
+                break
+            end
+        end
+    end
+    Fluent:Notify({ Title = "Bring", Content = "Đã bring " .. count .. " item!", Duration = 2 })
+end
+
+-- ── Tab Bring ──
+
+Tabs.Bring:AddSection("Junk Items")
+Tabs.Bring:AddDropdown("BringJunk", {
+    Title  = "Chọn Junk Items",
+    Values = junkItems,
+    Multi  = true,
+    Default = {},
+    Callback = function(val)
+        selectedJunkItems = {}
+        for k, _ in pairs(val) do table.insert(selectedJunkItems, k) end
+    end
+})
+Tabs.Bring:AddButton({
+    Title = "Bring Junk",
+    Description = "Kéo Junk về chỗ bạn",
+    Callback = function() bringItemsByNames(selectedJunkItems) end
 })
 
-RunService.RenderStepped:Connect(function(dt)
-	if not humanoid or not root then return end
+Tabs.Bring:AddSection("Fuel Items")
+Tabs.Bring:AddDropdown("BringFuel", {
+    Title  = "Chọn Fuel Items",
+    Values = fuelItems,
+    Multi  = true,
+    Default = {},
+    Callback = function(val)
+        selectedFuelItems = {}
+        for k, _ in pairs(val) do table.insert(selectedFuelItems, k) end
+    end
+})
+Tabs.Bring:AddButton({
+    Title = "Bring Fuel",
+    Description = "Kéo Fuel về chỗ bạn",
+    Callback = function() bringItemsByNames(selectedFuelItems) end
+})
 
-	local moveDir = humanoid.MoveDirection
-	if moveDir.Magnitude > 0 then
-		-- di chuyển theo hướng người chơi, an toàn không bị kick
-		root.CFrame = root.CFrame + moveDir * (speedValue - 16) * dt
-	end
-end)
+Tabs.Bring:AddSection("Food Items")
+Tabs.Bring:AddDropdown("BringFood", {
+    Title  = "Chọn Food Items",
+    Values = foodItems,
+    Multi  = true,
+    Default = {},
+    Callback = function(val)
+        selectedFoodItems = {}
+        for k, _ in pairs(val) do table.insert(selectedFoodItems, k) end
+    end
+})
+Tabs.Bring:AddButton({
+    Title = "Bring Food",
+    Description = "Kéo Food về chỗ bạn",
+    Callback = function() bringItemsByNames(selectedFoodItems) end
+})
 
---// Services
-local Players, RunService, UIS = game:GetService("Players"), game:GetService("RunService"), game:GetService("UserInputService")
-local Camera, LP = workspace.CurrentCamera, Players.LocalPlayer
-local Char, Humanoid = LP.Character or LP.CharacterAdded:Wait(), nil
-local Conns, RunSpeed, FlySpeed = {}, 16, 60
+Tabs.Bring:AddSection("Medical Items")
+Tabs.Bring:AddDropdown("BringMedical", {
+    Title  = "Chọn Medical Items",
+    Values = medicalItems,
+    Multi  = true,
+    Default = {},
+    Callback = function(val)
+        selectedMedicalItems = {}
+        for k, _ in pairs(val) do table.insert(selectedMedicalItems, k) end
+    end
+})
+Tabs.Bring:AddButton({
+    Title = "Bring Medical",
+    Description = "Kéo Medical về chỗ bạn",
+    Callback = function() bringItemsByNames(selectedMedicalItems) end
+})
 
---// Refresh Humanoid
-local function UpdateHumanoid(c)
-    Char, Humanoid = c, c:WaitForChild("Humanoid")
-    Humanoid.WalkSpeed = RunSpeed
+Tabs.Bring:AddSection("Equipment Items")
+Tabs.Bring:AddDropdown("BringEquip", {
+    Title  = "Chọn Equipment Items",
+    Values = equipmentItems,
+    Multi  = true,
+    Default = {},
+    Callback = function(val)
+        selectedEquipmentItems = {}
+        for k, _ in pairs(val) do table.insert(selectedEquipmentItems, k) end
+    end
+})
+Tabs.Bring:AddButton({
+    Title = "Bring Equipment",
+    Description = "Kéo Equipment về chỗ bạn",
+    Callback = function() bringItemsByNames(selectedEquipmentItems) end
+})
+
+Tabs.Bring:AddSection("Bring All")
+Tabs.Bring:AddButton({
+    Title = "Bring TẤT CẢ Item",
+    Description = "Kéo toàn bộ item trong map về",
+    Callback = function()
+        local char = LocalPlayer.Character
+        if not char or not char:FindFirstChild("HumanoidRootPart") then return end
+        local hrp   = char.HumanoidRootPart
+        local count = 0
+        for _, item in ipairs(workspace.Items:GetChildren()) do
+            moveItemToPos(item, hrp.Position + Vector3.new(math.random(-3,3), 0, math.random(-3,3)))
+            count = count + 1
+            task.wait(0.05)
+        end
+        Fluent:Notify({ Title = "Bring All", Content = "Đã bring " .. count .. " item!", Duration = 3 })
+    end
+})
+
+
+----------------------------------------------------------
+------------------// AUTO FARM LOG //---------------------
+----------------------------------------------------------
+
+local VirtualInputManager = game:GetService("VirtualInputManager")
+
+local autoFarmEnabled    = false
+local originalPosition   = nil
+local lastClickTime      = 0
+local clickDelay         = 0.3
+
+local function simulateClick()
+    if not autoFarmEnabled then return end
+    local currentTime = tick()
+    if currentTime - lastClickTime < clickDelay then return end
+    local camera      = workspace.CurrentCamera
+    local viewportSize = camera.ViewportSize
+    local clickX      = viewportSize.X - 10
+    local clickY      = viewportSize.Y * 0.75
+    VirtualInputManager:SendMouseButtonEvent(clickX, clickY, 0, true,  game, 0)
+    VirtualInputManager:SendMouseButtonEvent(clickX, clickY, 0, false, game, 0)
+    lastClickTime = currentTime
 end
-UpdateHumanoid(Char)
-LP.CharacterAdded:Connect(UpdateHumanoid)
 
---// Clear old connections
-local function ClearConn(tag)
-    if Conns[tag] then Conns[tag]:Disconnect() Conns[tag] = nil end
+local function teleportToAirAndAnchor()
+    local character = LocalPlayer.Character
+    if character and character:FindFirstChild("HumanoidRootPart") then
+        originalPosition = character.HumanoidRootPart.CFrame
+        local airPosition = character.HumanoidRootPart.Position + Vector3.new(0, 350, 0)
+        character.HumanoidRootPart.CFrame = CFrame.new(airPosition)
+        task.wait(0.5)
+        character.HumanoidRootPart.Anchored = true
+        return true
+    end
+    return false
 end
 
---// Infinite Jump
-Tabs.Player:AddToggle("InfJump",{Title="Nhảy Liên Tục",Default=false,
-    Callback=function(state)
-        ClearConn("InfJump")
-        if state then
-            Conns["InfJump"]=UIS.JumpRequest:Connect(function()
-                if Humanoid then Humanoid:ChangeState("Jumping") end
-            end)
+local function unanchorPlayer()
+    local character = LocalPlayer.Character
+    if character and character:FindFirstChild("HumanoidRootPart") then
+        character.HumanoidRootPart.Anchored = false
+        if originalPosition then
+            character.HumanoidRootPart.CFrame = originalPosition
+        end
+    end
+end
+
+local function teleportAllTreesToPlayer()
+    local character = LocalPlayer.Character
+    if not (character and character:FindFirstChild("HumanoidRootPart")) then
+        Fluent:Notify({ Title = "Auto Farm", Content = "Không tìm thấy nhân vật!", Duration = 3 })
+        return false
+    end
+    local playerPos = character.HumanoidRootPart.Position
+    if not workspace:FindFirstChild("Map") then
+        Fluent:Notify({ Title = "Auto Farm", Content = "Bạn chưa vào game!", Duration = 3 })
+        return false
+    end
+    local treesFound = 0
+
+    local function teleportTreesFromFolder(folder)
+        if not folder then return end
+        for _, item in pairs(folder:GetChildren()) do
+            local isSmallTree = false
+            if item.Name == "Small Tree" and item:IsA("Model") then
+                isSmallTree = true
+            elseif item:IsA("Model") then
+                local hasLeaves = item:FindFirstChild("Leaves") ~= nil
+                local hasTrunk  = item:FindFirstChild("Trunk")  ~= nil or item:FindFirstChild("trunk") ~= nil
+                local hasWood   = item:FindFirstChild("Wood")   ~= nil
+                if (hasLeaves or hasWood) and not hasTrunk then isSmallTree = true end
+            end
+            if isSmallTree then
+                treesFound = treesFound + 1
+                local targetPosition = Vector3.new(
+                    playerPos.X + math.random(-3, 3),
+                    playerPos.Y - 5,
+                    playerPos.Z + math.random(-3, 3)
+                )
+                pcall(function()
+                    if item.PrimaryPart then
+                        item:SetPrimaryPartCFrame(CFrame.new(targetPosition))
+                    else
+                        local mainPart = item:FindFirstChildOfClass("BasePart")
+                        if mainPart then
+                            local offset = targetPosition - mainPart.Position
+                            for _, part in pairs(item:GetDescendants()) do
+                                if part:IsA("BasePart") then
+                                    part.CFrame = part.CFrame + offset
+                                end
+                            end
+                        end
+                    end
+                end)
+            end
+        end
+    end
+
+    local map = workspace.Map
+    if map:FindFirstChild("Foliage")   then teleportTreesFromFolder(map.Foliage)   end
+    if map:FindFirstChild("Landmarks") then teleportTreesFromFolder(map.Landmarks) end
+    return treesFound
+end
+
+-- Click loop khi auto farm bật
+local clickConnection
+local function startClickLoop()
+    if clickConnection then clickConnection:Disconnect() end
+    clickConnection = RunService.Heartbeat:Connect(function()
+        if autoFarmEnabled then simulateClick() end
+    end)
+end
+
+-- ── Tab Auto Farm ──
+
+Tabs.AutoFarm:AddSection("Auto Farm Log")
+
+Tabs.AutoFarm:AddButton({
+    Title       = "Bắt đầu Auto Farm",
+    Description = "Teleport cây về, anchor nhân vật và tự chặt",
+    Callback    = function()
+        if autoFarmEnabled then
+            Fluent:Notify({ Title = "Auto Farm", Content = "Đang chạy rồi!", Duration = 2 })
+            return
+        end
+        local ok = teleportToAirAndAnchor()
+        if not ok then return end
+        task.wait(0.3)
+        local count = teleportAllTreesToPlayer()
+        autoFarmEnabled = true
+        startClickLoop()
+        Fluent:Notify({
+            Title   = "Auto Farm",
+            Content = "Đang farm! Đã kéo " .. tostring(count) .. " cây về.",
+            Duration = 4
+        })
+    end
+})
+
+Tabs.AutoFarm:AddButton({
+    Title       = "Dừng Auto Farm",
+    Description = "Bỏ anchor và về vị trí cũ",
+    Callback    = function()
+        autoFarmEnabled = false
+        if clickConnection then clickConnection:Disconnect() clickConnection = nil end
+        unanchorPlayer()
+        Fluent:Notify({ Title = "Auto Farm", Content = "Đã dừng!", Duration = 2 })
+    end
+})
+
+Tabs.AutoFarm:AddButton({
+    Title       = "Kéo cây lại (Refresh)",
+    Description = "Kéo tất cả cây về chỗ bạn thêm 1 lần nữa",
+    Callback    = function()
+        local count = teleportAllTreesToPlayer()
+        Fluent:Notify({ Title = "Refresh", Content = "Đã kéo " .. tostring(count) .. " cây!", Duration = 2 })
+    end
+})
+
+Tabs.AutoFarm:AddSlider("ClickDelay", {
+    Title       = "Tốc độ Click (giây)",
+    Description = "Thời gian giữa các lần click",
+    Default     = 3,
+    Min         = 1,
+    Max         = 10,
+    Rounding    = 1,
+    Callback    = function(v) clickDelay = v / 10 end
+})
+
+
+----------------------------------------------------------
+------------------// TELEPORT //-------------------------
+----------------------------------------------------------
+
+Tabs.Teleport:AddSection("Địa điểm nhanh")
+
+-- TP1: vị trí hardcode (spawn/base)
+Tabs.Teleport:AddButton({
+    Title       = "Teleport về Spawn",
+    Description = "Về vị trí spawn mặc định của map",
+    Callback    = function()
+        local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+        local hrp  = char:WaitForChild("HumanoidRootPart")
+        hrp.CFrame = CFrame.new(
+            0.43132782, 15.77634621, -1.88620758,
+            -0.270917892, 0.102997094, 0.957076371,
+            0.639657021, 0.762253821, 0.0990355015,
+            -0.719334781, 0.639031112, -0.272391081
+        )
+        Fluent:Notify({ Title = "Teleport", Content = "Đã TP về Spawn!", Duration = 2 })
+    end
+})
+
+-- TP2: Stronghold
+Tabs.Teleport:AddButton({
+    Title       = "Teleport đến Stronghold",
+    Description = "Vào cửa Stronghold",
+    Callback    = function()
+        local targetPart = workspace:FindFirstChild("Map")
+            and workspace.Map:FindFirstChild("Landmarks")
+            and workspace.Map.Landmarks:FindFirstChild("Stronghold")
+            and workspace.Map.Landmarks.Stronghold:FindFirstChild("Functional")
+            and workspace.Map.Landmarks.Stronghold.Functional:FindFirstChild("EntryDoors")
+            and workspace.Map.Landmarks.Stronghold.Functional.EntryDoors:FindFirstChild("DoorRight")
+            and workspace.Map.Landmarks.Stronghold.Functional.EntryDoors.DoorRight:FindFirstChild("Model")
+        if targetPart then
+            local children     = targetPart:GetChildren()
+            local destination  = children[5]
+            if destination and destination:IsA("BasePart") then
+                local hrp = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                if hrp then
+                    hrp.CFrame = destination.CFrame + Vector3.new(0, 5, 0)
+                    Fluent:Notify({ Title = "Teleport", Content = "Đã TP đến Stronghold!", Duration = 2 })
+                end
+            end
+        else
+            Fluent:Notify({ Title = "Teleport", Content = "Không tìm thấy Stronghold!", Duration = 2 })
         end
     end
 })
 
---// Jump Power
-Tabs.Player:AddSlider("JumpPower",{Title="Nhảy Cao",Default=50,Min=50,Max=200,Rounding=1,
-    Callback=function(v) if Humanoid then Humanoid.UseJumpPower=true Humanoid.JumpPower=v end end})
+-- TP đến item trên map
+Tabs.Teleport:AddSection("Teleport đến Item")
+Tabs.Teleport:AddInput("TpItemName", {
+    Title       = "Tên item",
+    Placeholder = "VD: Revolver, MedKit...",
+    Default     = "",
+    Callback    = function() end
+})
+Tabs.Teleport:AddButton({
+    Title       = "TP đến Item",
+    Description = "Teleport đến item đầu tiên tìm thấy",
+    Callback    = function()
+        local opt  = Fluent.Options["TpItemName"]
+        local name = opt and opt.Value or ""
+        if name == "" then
+            Fluent:Notify({ Title = "Teleport", Content = "Nhập tên item trước!", Duration = 2 })
+            return
+        end
+        local found = false
+        for _, item in ipairs(workspace.Items:GetChildren()) do
+            if item.Name:lower() == name:lower() then
+                local part = item:IsA("Model") and (item.PrimaryPart or item:FindFirstChildWhichIsA("BasePart")) or item
+                if part and part:IsA("BasePart") then
+                    local hrp = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                    if hrp then
+                        hrp.CFrame = CFrame.new(part.Position + Vector3.new(0, 5, 0))
+                        Fluent:Notify({ Title = "Teleport", Content = "Đã TP đến " .. item.Name, Duration = 2 })
+                        found = true
+                        break
+                    end
+                end
+            end
+        end
+        if not found then
+            Fluent:Notify({ Title = "Teleport", Content = "Không tìm thấy: " .. name, Duration = 2 })
+        end
+    end
+})
 
-local flyToggle=false;local flySpeed=1;local FLYING=false;local mfly1,mfly2;local function UnMobileFly()FLYING=false;if mfly1 then mfly1:Disconnect()mfly1=nil end;if mfly2 then mfly2:Disconnect()mfly2=nil end;local char=LocalPlayer.Character;if char then local root=char:FindFirstChild("HumanoidRootPart")local hum=char:FindFirstChildOfClass("Humanoid")if hum then hum.PlatformStand=false end;if root then if root:FindFirstChild("BodyVelocity")then root.BodyVelocity:Destroy()end;if root:FindFirstChild("BodyGyro")then root.BodyGyro:Destroy()end end end end;local function MobileFly()if FLYING then return end;FLYING=true;local char=LocalPlayer.Character;local root=char:WaitForChild("HumanoidRootPart")local controlModule=require(LocalPlayer.PlayerScripts:WaitForChild("PlayerModule"):WaitForChild("ControlModule"))local bv=Instance.new("BodyVelocity",root)bv.Name="BodyVelocity"bv.MaxForce=Vector3.new(9e9,9e9,9e9)local bg=Instance.new("BodyGyro",root)bg.Name="BodyGyro"bg.MaxTorque=Vector3.new(9e9,9e9,9e9)bg.P=1000;mfly2=RunService.RenderStepped:Connect(function()if FLYING and char and char:FindFirstChildOfClass("Humanoid")then char:FindFirstChildOfClass("Humanoid").PlatformStand=true;bg.CFrame=workspace.CurrentCamera.CFrame;local direction=controlModule:GetMoveVector()bv.Velocity=((workspace.CurrentCamera.CFrame.RightVector*direction.X)+(-workspace.CurrentCamera.CFrame.LookVector*direction.Z))*(flySpeed*50)else UnMobileFly()end end)end;Tabs.Player:AddToggle("FlyToggle",{Title="Fly (Bay)",Default=false,Callback=function(state)flyToggle=state;if state then MobileFly()else UnMobileFly()end end})Tabs.Player:AddSlider("FlySpeed",{Title="Tốc độ bay",Default=1,Min=1,Max=20,Rounding=1,Callback=function(value)flySpeed=value end})
+-- TP đến player khác
+Tabs.Teleport:AddSection("Teleport đến Player")
+local playerNames = {}
+for _, p in ipairs(Players:GetPlayers()) do
+    if p ~= LocalPlayer then table.insert(playerNames, p.Name) end
+end
+if #playerNames == 0 then playerNames = {"(Không có player)"}  end
+
+Tabs.Teleport:AddDropdown("TpPlayerDrop", {
+    Title   = "Chọn Player",
+    Values  = playerNames,
+    Multi   = false,
+    Default = playerNames[1],
+    Callback = function() end
+})
+Tabs.Teleport:AddButton({
+    Title       = "TP đến Player",
+    Description = "Teleport đến người chơi đã chọn",
+    Callback    = function()
+        local opt    = Fluent.Options["TpPlayerDrop"]
+        local pName  = opt and opt.Value or ""
+        local target = Players:FindFirstChild(pName)
+        if not target or not target.Character then
+            Fluent:Notify({ Title = "Teleport", Content = "Không tìm thấy player!", Duration = 2 })
+            return
+        end
+        local tHrp = target.Character:FindFirstChild("HumanoidRootPart")
+        local hrp  = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+        if tHrp and hrp then
+            hrp.CFrame = tHrp.CFrame + Vector3.new(0, 3, 0)
+            Fluent:Notify({ Title = "Teleport", Content = "Đã TP đến " .. pName, Duration = 2 })
+        end
+    end
+})
 
 
-LP.CharacterAdded:Connect(function(c)Char=c end)
--- Auto Xoay với Slider
-local spinEnabled = false
-local spinAngle = 0
-local spinSpeed = 50 -- tốc độ mặc định
-Tabs.Player:AddToggle("AutoSpin", {
-    Title = "Auto Xoay", 
+----------------------------------------------------------
+------------------// MISC //------------------------------
+----------------------------------------------------------
+
+-- No Fog
+local oldFogStart = Lighting.FogStart
+local oldFogEnd   = Lighting.FogEnd
+local oldFogColor = Lighting.FogColor
+local noFogConn
+
+Tabs.Misc:AddSection("Visual")
+
+Tabs.Misc:AddToggle("NoFog", {
+    Title   = "No Fog",
     Default = false,
     Callback = function(state)
-        spinEnabled = state
+        if state then
+            Lighting.FogStart = 0
+            Lighting.FogEnd   = 1e10
+            Lighting.FogColor = Color3.fromRGB(255, 255, 255)
+            noFogConn = RunService.RenderStepped:Connect(function()
+                if Lighting.FogStart ~= 0          then Lighting.FogStart = 0 end
+                if Lighting.FogEnd   ~= 1e10        then Lighting.FogEnd   = 1e10 end
+                if Lighting.FogColor ~= Color3.fromRGB(255,255,255) then
+                    Lighting.FogColor = Color3.fromRGB(255,255,255)
+                end
+            end)
+        else
+            if noFogConn then noFogConn:Disconnect() noFogConn = nil end
+            Lighting.FogStart = oldFogStart
+            Lighting.FogEnd   = oldFogEnd
+            Lighting.FogColor = oldFogColor
+        end
     end
 })
-Tabs.Player:AddSlider("SpinSpeed", {
-    Title = "Tốc độ xoay",
-    Description = "Tốc độ xoay",
-    Default = spinSpeed,
-    Min = 10,
-    Max = 1000,
-    Rounding = 0,
-    Callback = function(value)
-        spinSpeed = value
+
+-- Vibrant Colors
+local vibrantEffect = Lighting:FindFirstChild("VibrantEffect") or Instance.new("ColorCorrectionEffect")
+vibrantEffect.Name       = "VibrantEffect"
+vibrantEffect.Saturation = 0.9
+vibrantEffect.Contrast   = 0.4
+vibrantEffect.Brightness = 0.1
+vibrantEffect.Enabled    = false
+vibrantEffect.Parent     = Lighting
+
+Tabs.Misc:AddToggle("VibrantColors", {
+    Title   = "Vibrant Colors",
+    Default = false,
+    Callback = function(state)
+        if state then
+            Lighting.Ambient            = Color3.fromRGB(180, 180, 180)
+            Lighting.OutdoorAmbient     = Color3.fromRGB(170, 170, 170)
+            Lighting.ColorShift_Top     = Color3.fromRGB(255, 230, 200)
+            Lighting.ColorShift_Bottom  = Color3.fromRGB(200, 240, 255)
+            vibrantEffect.Enabled       = true
+        else
+            Lighting.Ambient            = Color3.new(0,0,0)
+            Lighting.OutdoorAmbient     = Color3.new(0,0,0)
+            Lighting.ColorShift_Top     = Color3.new(0,0,0)
+            Lighting.ColorShift_Bottom  = Color3.new(0,0,0)
+            vibrantEffect.Enabled       = false
+        end
     end
 })
-RunService.Heartbeat:Connect(function(dt)
-    local Character = LocalPlayer.Character
-    if spinEnabled and Character and Character:FindFirstChild("HumanoidRootPart") then
-        spinAngle = spinAngle + dt * spinSpeed
-        local root = Character.HumanoidRootPart
-        local pos = root.Position
-        root.CFrame = CFrame.new(pos) * CFrame.Angles(0, spinAngle, 0)
+
+-- FPS / Ping Counter
+local Camera3      = workspace.CurrentCamera
+local showFPS      = true
+local showPing     = true
+local fpsCounter2  = 0
+local fpsLastUpdate2 = tick()
+local fpsValue2    = 0
+
+local function createText2(yOffset)
+    local t = Drawing.new("Text")
+    t.Size     = 16
+    t.Position = Vector2.new(Camera3.ViewportSize.X - 110, yOffset)
+    t.Color    = Color3.fromRGB(0, 255, 0)
+    t.Center   = false
+    t.Outline  = true
+    t.Visible  = true
+    return t
+end
+
+local fpsText2 = createText2(10)
+local msText2  = createText2(30)
+
+Camera3:GetPropertyChangedSignal("ViewportSize"):Connect(function()
+    fpsText2.Position = Vector2.new(Camera3.ViewportSize.X - 110, 10)
+    msText2.Position  = Vector2.new(Camera3.ViewportSize.X - 110, 30)
+end)
+
+RunService.RenderStepped:Connect(function()
+    fpsCounter2 += 1
+    if tick() - fpsLastUpdate2 >= 1 then
+        fpsValue2      = fpsCounter2
+        fpsCounter2    = 0
+        fpsLastUpdate2 = tick()
+
+        if showFPS then
+            fpsText2.Text  = string.format("FPS: %d", fpsValue2)
+            fpsText2.Color = fpsValue2 >= 50 and Color3.fromRGB(0, 255, 0)
+                or fpsValue2 >= 30 and Color3.fromRGB(255, 165, 0)
+                or Color3.fromRGB(255, 0, 0)
+            fpsText2.Visible = true
+        else
+            fpsText2.Visible = false
+        end
+
+        if showPing then
+            local Stats    = game:GetService("Stats")
+            local pingStat = Stats.Network.ServerStatsItem["Data Ping"]
+            local ping     = pingStat and math.floor(pingStat:GetValue()) or 0
+            local color, label = Color3.fromRGB(0, 255, 0), "Ping: "
+            if ping > 120 then
+                color, label = Color3.fromRGB(255, 0, 0), "Ew Wifi Ping: "
+            elseif ping > 60 then
+                color = Color3.fromRGB(255, 165, 0)
+            end
+            msText2.Text    = string.format("%s%d ms", label, ping)
+            msText2.Color   = color
+            msText2.Visible = true
+        else
+            msText2.Visible = false
+        end
     end
 end)
-local Camera = workspace.CurrentCamera
-Tabs.Player:AddSlider("CamFOV", {
-    Title = "Độ rộng camera",
-    Default = 70,
-    Min = 70,
-    Max = 120,
-    Rounding = 0,
-    Callback = function(value)
-        Camera.FieldOfView = value
+
+Tabs.Misc:AddSection("Show Status")
+
+Tabs.Misc:AddToggle("ShowFPS", {
+    Title   = "Show FPS",
+    Default = true,
+    Callback = function(val)
+        showFPS          = val
+        fpsText2.Visible = val
     end
 })
 
+Tabs.Misc:AddToggle("ShowPing", {
+    Title   = "Show Ping (ms)",
+    Default = true,
+    Callback = function(val)
+        showPing         = val
+        msText2.Visible  = val
+    end
+})
 
-end
-Plr()
+-- FPS Boost
+Tabs.Misc:AddSection("Performance")
 
+Tabs.Misc:AddButton({
+    Title       = "FPS Boost (Nuke Graphics)",
+    Description = "Tắt shadow, particle, post effect - tăng FPS mạnh",
+    Callback    = function()
+        pcall(function()
+            settings().Rendering.QualityLevel = Enum.QualityLevel.Level01
+            Lighting.Brightness                = 0
+            Lighting.FogEnd                    = 100
+            Lighting.GlobalShadows             = false
+            Lighting.EnvironmentDiffuseScale   = 0
+            Lighting.EnvironmentSpecularScale  = 0
+            Lighting.ClockTime                 = 14
+            Lighting.OutdoorAmbient            = Color3.new(0, 0, 0)
+            local terrain = workspace:FindFirstChildOfClass("Terrain")
+            if terrain then
+                terrain.WaterWaveSize     = 0
+                terrain.WaterWaveSpeed    = 0
+                terrain.WaterReflectance  = 0
+                terrain.WaterTransparency = 1
+            end
+            for _, obj in ipairs(Lighting:GetDescendants()) do
+                if obj:IsA("PostEffect") or obj:IsA("BloomEffect") or
+                   obj:IsA("ColorCorrectionEffect") or obj:IsA("SunRaysEffect") or
+                   obj:IsA("BlurEffect") then
+                    obj.Enabled = false
+                end
+            end
+            for _, obj in ipairs(game:GetDescendants()) do
+                if obj:IsA("ParticleEmitter") or obj:IsA("Trail") then
+                    obj.Enabled = false
+                elseif obj:IsA("Texture") or obj:IsA("Decal") then
+                    obj.Transparency = 1
+                end
+            end
+            for _, part in ipairs(workspace:GetDescendants()) do
+                if part:IsA("BasePart") then part.CastShadow = false end
+            end
+        end)
+        Fluent:Notify({ Title = "FPS Boost", Content = "Đã áp dụng FPS Boost!", Duration = 3 })
+    end
+})
 
 
 ----------------------------------------------------------
 ------------------// FIXLAG //---------------------------
 ----------------------------------------------------------
 
-
 Tabs.FixLag:AddButton({
     Title = "Fix Lag 10% (Nhẹ)",
     Description = "Xóa hiệu ứng khói bụi, lửa, tia lửa nhỏ",
     Callback = function()
         local count = 0
-        -- Chỉ quét những thứ gây nặng GPU do chuyển động nhiều
         local effects = {"ParticleEmitter", "Fire", "Smoke", "Sparkles", "Explosion"}
-        
         for _, obj in pairs(game.Workspace:GetDescendants()) do
             for _, className in pairs(effects) do
-                if obj:IsA(className) then
-                    obj.Enabled = false -- Chỉ tắt, không xóa vĩnh viễn (An toàn)
-                    count = count + 1
-                end
+                if obj:IsA(className) then obj.Enabled = false count = count + 1 end
             end
         end
-        
-        Fluent:Notify({
-            Title = "Performance",
-            Content = "Đã tối ưu 10%: Tắt " .. count .. " hiệu ứng gây lag!",
-            Duration = 3
-        })
+        Fluent:Notify({ Title = "Performance", Content = "Tối ưu 10%: Tắt " .. count .. " hiệu ứng!", Duration = 3 })
     end
 })
-
 
 Tabs.FixLag:AddButton({
     Title = "Fix Lag 25% (Cân bằng)",
@@ -414,185 +1068,105 @@ Tabs.FixLag:AddButton({
     Callback = function()
         local count = 0
         local effects = {"ParticleEmitter", "Fire", "Smoke", "Sparkles", "Explosion"}
-        
         for _, obj in pairs(game.Workspace:GetDescendants()) do
-            -- 1. Tắt các hiệu ứng hạt (giống 10%)
             for _, className in pairs(effects) do
-                if obj:IsA(className) then
-                    obj.Enabled = false
-                    count = count + 1
-                end
+                if obj:IsA(className) then obj.Enabled = false count = count + 1 end
             end
-            
-            -- 2. Tắt đổ bóng cho các vật thể tĩnh (BasePart)
-            -- Đây là chìa khóa của mức 25%: Giảm gánh nặng cho GPU
-            if obj:IsA("BasePart") then
-                if obj.CastShadow == true then
-                    obj.CastShadow = false
-                    count = count + 1
-                end
-            end
+            if obj:IsA("BasePart") and obj.CastShadow then obj.CastShadow = false count = count + 1 end
         end
-        
-        Fluent:Notify({
-            Title = "Performance",
-            Content = "Đã tối ưu 25%: Tắt hiệu ứng & Đổ bóng (" .. count .. " đối tượng)",
-            Duration = 3
-        })
+        Fluent:Notify({ Title = "Performance", Content = "Tối ưu 25%: " .. count .. " đối tượng", Duration = 3 })
     end
 })
 
-
 Tabs.FixLag:AddButton({
     Title = "Fix Lag 50% (Tối ưu vật liệu)",
-    Description = "Chuyển vật liệu về nhựa (Plastic) để tăng FPS",
+    Description = "Chuyển vật liệu về Plastic để tăng FPS",
     Callback = function()
-        -- 1. Cưỡng ép giảm Graphics của Roblox về mức tối thiểu
-        UserSettings().GameSettings.SavedQualityLevel = Enum.SavedQualitySetting.Manual
+        UserSettings().GameSettings.SavedQualityLevel   = Enum.SavedQualitySetting.Manual
         UserSettings().GameSettings.GraphicsQualityLevel = 1
-        
         local count = 0
         for _, obj in pairs(game.Workspace:GetDescendants()) do
-            -- 2. Chuyển tất cả vật liệu về Plastic để GPU render nhẹ hơn
             if obj:IsA("BasePart") then
-                if obj.Material ~= Enum.Material.Plastic then
-                    obj.Material = Enum.Material.Plastic
-                    obj.Reflectance = 0 -- Tắt độ phản chiếu
-                    count = count + 1
-                end
-                obj.CastShadow = false -- Tiếp tục tắt bóng
+                if obj.Material ~= Enum.Material.Plastic then obj.Material = Enum.Material.Plastic count = count + 1 end
+                obj.Reflectance = 0
+                obj.CastShadow  = false
             end
-            
-            -- 3. Tắt các vật thể phụ như khói, lửa, ánh sáng (PointLight, SpotLight)
             if obj:IsA("Light") or obj:IsA("Fire") or obj:IsA("Smoke") or obj:IsA("ParticleEmitter") then
                 obj.Enabled = false
             end
         end
-        
-        Fluent:Notify({
-            Title = "Performance",
-            Content = "Đã tối ưu 50%: Chuyển vật liệu sang Plastic (" .. count .. " phần)",
-            Duration = 3
-        })
+        Fluent:Notify({ Title = "Performance", Content = "Tối ưu 50%: " .. count .. " phần Plastic", Duration = 3 })
     end
 })
-
 
 Tabs.FixLag:AddButton({
     Title = "Fix Lag 70% (Tối thượng)",
-    Description = "Xóa toàn bộ vật thể phụ & Tối ưu hóa render",
+    Description = "Xóa toàn bộ vật thể phụ & tối ưu render",
     Callback = function()
-        -- 1. Giảm Graphics Roblox về thấp nhất có thể
         UserSettings().GameSettings.GraphicsQualityLevel = 1
-        
         local count = 0
-        local toRemove = {"Smoke", "Fire", "Sparkles", "ParticleEmitter", "Trail", "Explosion", "PointLight", "SpotLight", "SurfaceLight"}
-        
+        local toRemove = {"Smoke","Fire","Sparkles","ParticleEmitter","Trail","Explosion","PointLight","SpotLight","SurfaceLight"}
         for _, obj in pairs(game.Workspace:GetDescendants()) do
-            -- 2. Xóa sạch các vật thể phụ không cần thiết
             for _, class in pairs(toRemove) do
-                if obj:IsA(class) then
-                    obj:Destroy()
-                    count = count + 1
-                end
+                if obj:IsA(class) then obj:Destroy() count = count + 1 end
             end
-            
-            -- 3. Cực hạn: Chuyển toàn bộ Part về Plastic và tắt Shadow
-            if obj:IsA("BasePart") then
-                obj.Material = Enum.Material.Plastic
-                obj.CastShadow = false
-                obj.Reflectance = 0
-            end
-            
-            -- 4. Xóa Decal/Texture (Ở mức 70% này chúng ta xóa để tối ưu tuyệt đối)
-            if obj:IsA("Decal") or obj:IsA("Texture") then
-                obj:Destroy()
-                count = count + 1
-            end
+            if obj:IsA("BasePart") then obj.Material = Enum.Material.Plastic obj.CastShadow = false obj.Reflectance = 0 end
+            if obj:IsA("Decal") or obj:IsA("Texture") then obj:Destroy() count = count + 1 end
         end
-        
-        Fluent:Notify({
-            Title = "Performance",
-            Content = "Đã tối ưu 70%: Xóa hiệu ứng & vật thể phụ (" .. count .. " đối tượng)",
-            Duration = 5
-        })
+        Fluent:Notify({ Title = "Performance", Content = "Tối ưu 70%: " .. count .. " đối tượng", Duration = 5 })
     end
 })
-
 
 Tabs.FixLag:AddButton({
     Title = "Fix Lag 80% (Siêu mượt)",
     Description = "Ép game về trạng thái tối giản nhất",
     Callback = function()
-        -- 1. Ép đồ họa xuống mức thấp nhất và tắt mọi hiệu ứng hệ thống
         UserSettings().GameSettings.GraphicsQualityLevel = 1
-        
-        -- 2. Xóa sạch mọi thứ dư thừa bằng cách "Clean World"
         for _, obj in pairs(game.Workspace:GetDescendants()) do
-            -- Xóa toàn bộ hiệu ứng, ánh sáng, vật thể trang trí, decal, textures
-            if obj:IsA("ParticleEmitter") or obj:IsA("Fire") or obj:IsA("Smoke") or 
-               obj:IsA("Sparkles") or obj:IsA("Explosion") or obj:IsA("Light") or 
+            if obj:IsA("ParticleEmitter") or obj:IsA("Fire") or obj:IsA("Smoke") or
+               obj:IsA("Sparkles") or obj:IsA("Explosion") or obj:IsA("Light") or
                obj:IsA("Decal") or obj:IsA("Texture") or obj:IsA("Trail") then
                 obj:Destroy()
             end
-            
-            -- Ép toàn bộ vật thể về Plastic màu xám/trắng để giảm tải GPU tuyệt đối
             if obj:IsA("BasePart") then
-                obj.Material = Enum.Material.Plastic
-                obj.CastShadow = false
-                obj.Reflectance = 0
-                obj.MaterialVariant = "" -- Xóa biến thể vật liệu
+                obj.Material        = Enum.Material.Plastic
+                obj.CastShadow      = false
+                obj.Reflectance     = 0
+                obj.MaterialVariant = ""
             end
         end
-        
-        -- 3. Xóa cả Skybox (bầu trời) để giảm gánh nặng render môi trường
-        if game.Lighting:FindFirstChildOfClass("Sky") then
-            game.Lighting:FindFirstChildOfClass("Sky"):Destroy()
-        end
-        
-        -- 4. Ép Fog (Sương mù) về 0 để camera không phải render tầm xa
-        game.Lighting.FogEnd = 99999
-        game.Lighting.FogStart = 0
-        
-        Fluent:Notify({
-            Title = "Performance",
-            Content = "Đã tối ưu 80%: Siêu nén toàn bộ hệ thống!",
-            Duration = 5
-        })
+        if Lighting:FindFirstChildOfClass("Sky") then Lighting:FindFirstChildOfClass("Sky"):Destroy() end
+        Lighting.FogEnd   = 99999
+        Lighting.FogStart = 0
+        Fluent:Notify({ Title = "Performance", Content = "Tối ưu 80%: Siêu nén hệ thống!", Duration = 5 })
     end
 })
 
 
 ----------------------------------------------------------
-------------------// SERVER//-----------------------------
+------------------// SERVER //----------------------------
 ----------------------------------------------------------
 
-
 local function Server()
-    local PlaceId              = game.PlaceId
-    local JobId                = game.JobId
-
-    local jobIdInput = ""
-    local hopCursor = ""
-    local triedServers = {}
-
+    local HttpService    = game:GetService("HttpService")
+    local TeleportService = game:GetService("TeleportService")
+    local PlaceId        = game.PlaceId
+    local JobId          = game.JobId
+    local jobIdInput     = ""
+    local hopCursor      = ""
+    local triedServers   = {}
 
     local function notify(title, content, duration)
-        Fluent:Notify({
-            Title = title,
-            Content = content,
-            Duration = duration or 3
-        })
+        Fluent:Notify({ Title = title, Content = content, Duration = duration or 3 })
     end
 
-
     local statusParagraph = Tabs.Server:AddParagraph({
-        Title = "Server Status",
+        Title   = "Server Status",
         Content = "Loading data..."
     })
 
     local function getServerTime()
-        local t = workspace:GetServerTimeNow()
+        local t       = workspace:GetServerTimeNow()
         local minutes = math.floor(t / 60)
         local seconds = math.floor(t % 60)
         return string.format("%02d:%02d", minutes, seconds)
@@ -602,99 +1176,73 @@ local function Server()
         while task.wait(1) do
             statusParagraph:SetDesc(
                 " | Server Info\n" ..
-                " | Player: " .. #Players:GetPlayers() .. "\n" ..
-                " | JobId: " .. JobId .. "\n" ..
-                " | Time: " .. getServerTime() .. "\n" ..
+                " | Player: "  .. #Players:GetPlayers() .. "\n" ..
+                " | JobId: "   .. JobId .. "\n" ..
+                " | Time: "    .. getServerTime() .. "\n" ..
                 " | PlaceId: " .. PlaceId
             )
         end
     end)
 
-
     Tabs.Server:AddButton({
-        Title = "Copy JobId",
+        Title       = "Copy JobId",
         Description = "JobId: " .. JobId,
-        Callback = function()
+        Callback    = function()
             setclipboard(JobId)
             notify("Đã sao chép JobId!", JobId)
         end
     })
 
-
-    Tabs.Server:AddInput("Input", {
-        Title = "Nhập JobId",
+    Tabs.Server:AddInput("ServerInput", {
+        Title       = "Nhập JobId",
         Placeholder = "ghi vào đây",
-        Default = "",
-        Callback = function(input)
-            jobIdInput = input
-        end
+        Default     = "",
+        Callback    = function(input) jobIdInput = input end
     })
 
     Tabs.Server:AddButton({
-        Title = "Join JobId",
+        Title       = "Join JobId",
         Description = "Teleport đến server bạn muốn",
-        Callback = function()
-            if jobIdInput == "" then
-                notify("Error", "Ghi job id vô lm ơn")
-                return
-            end
-
-            local success, err = pcall(function()
+        Callback    = function()
+            if jobIdInput == "" then notify("Error", "Ghi job id vô làm ơn") return end
+            local success2, err = pcall(function()
                 TeleportService:TeleportToPlaceInstance(PlaceId, jobIdInput, LocalPlayer)
             end)
-
-            if success then
+            if success2 then
                 notify("Teleporting...", "Joining JobId: " .. jobIdInput, 4)
             else
-                notify("Error", "Không thể join JobId: " .. tostring(err), 4)
+                notify("Error", "Không thể join: " .. tostring(err), 4)
             end
         end
     })
 
-
     local function smartRejoin()
         if game.PrivateServerId ~= "" then
-            warn("Rejoin: Private Server")
-            TeleportService:TeleportToPrivateServer(
-                PlaceId,
-                game.PrivateServerId,
-                {LocalPlayer}
-            )
+            TeleportService:TeleportToPrivateServer(PlaceId, game.PrivateServerId, {LocalPlayer})
         else
-            warn("Rejoin: Public Server")
             TeleportService:Teleport(PlaceId, LocalPlayer)
         end
     end
 
     Tabs.Server:AddButton({
-        Title = "Rejoin Server",
+        Title       = "Rejoin Server",
         Description = "Tự nhận diện server thường / private",
-        Callback = smartRejoin
+        Callback    = smartRejoin
     })
-
+e
     local function serverHop()
         while true do
-            local success, result = pcall(function()
+            local s2, result = pcall(function()
                 return HttpService:JSONDecode(
-                    game:HttpGet(
-                        "https://games.roblox.com/v1/games/" ..
-                        PlaceId ..
-                        "/servers/Public?sortOrder=Asc&limit=100&cursor=" ..
-                        hopCursor
-                    )
+                    game:HttpGet("https://games.roblox.com/v1/games/" .. PlaceId ..
+                        "/servers/Public?sortOrder=Asc&limit=100&cursor=" .. hopCursor)
                 )
             end)
-
-            if not success or not result or not result.data then
-                notify("Error", "Đéo lấy dc dữ liệu server", 4)
-                return
+            if not s2 or not result or not result.data then
+                notify("Error", "Đéo lấy dc dữ liệu server", 4) return
             end
-
             for _, server in ipairs(result.data) do
-                if server.playing < server.maxPlayers
-                    and server.id ~= JobId
-                    and not triedServers[server.id] then
-
+                if server.playing < server.maxPlayers and server.id ~= JobId and not triedServers[server.id] then
                     triedServers[server.id] = true
                     notify("Hop Server", "Đợi tí...", 5)
                     task.wait(1)
@@ -702,137 +1250,35 @@ local function Server()
                     return
                 end
             end
-
             hopCursor = result.nextPageCursor or ""
-            if hopCursor == "" then
-                notify("No Servers", "Chả tìm thấy server nào", 4)
-                return
-            end
-            -- else: loop continues to next page
+            if hopCursor == "" then notify("No Servers", "Chả tìm thấy server nào", 4) return end
         end
     end
 
     Tabs.Server:AddButton({
-        Title = "Hop Server",
+        Title       = "Hop Server",
         Description = "Bấm zô",
-        Callback = function()
-            hopCursor = ""
-            triedServers = {}
-            serverHop()
-        end
+        Callback    = function() hopCursor = "" triedServers = {} serverHop() end
     })
-
 end
-
 Server()
 
 
 ----------------------------------------------------------
-------------------// SETTING //--------------------------
+------------------// SETTINGS //-------------------------
 ----------------------------------------------------------
-
-
-
 
 local ThemeList = {"Dark", "Light", "Amethyst", "Aqua", "Lightning"}
 
 Tabs.Settings:AddDropdown("ThemeDropdown", {
-    Title = "Chọn Theme",
+    Title       = "Chọn Theme",
     Description = "Thay đổi giao diện Menu",
-    Values = ThemeList,
-    Multi = false,
-    Default = "Dark",
-    Callback = function(Value)
-        -- Sử dụng pcall để tránh script bị "đứng" nếu chọn nhầm theme không hỗ trợ
-        pcall(function()
-            Fluent:SetTheme(Value)
-        end)
-        Fluent:Notify({
-            Title = "Theme",
-            Content = "Đã áp dụng theme: " .. Value,
-            Duration = 2
-        })
+    Values      = ThemeList,
+    Multi       = false,
+    Default     = "Dark",
+    Callback    = function(Value)
+        pcall(function() Fluent:SetTheme(Value) end)
+        Fluent:Notify({ Title = "Theme", Content = "Đã áp dụng theme: " .. Value, Duration = 2 })
     end
 })
 
---=======================================================================
---📦 TAB BRING
---=======================================================================
-
--- bring
-
-local junkItems = {"Tyre", "Bolt", "Broken Fan", "Broken Microwave", "Sheet Metal", "Old Radio", "Washing Machine", "Old Car Engine"}
-local selectedJunkItems = {}
-local fuelItems = {"Log", "Chair", "Coal", "Fuel Canister", "Oil Barrel"}
-local selectedFuelItems = {}
-local foodItems = {"Cake", "Cooked Steak", "Cooked Morsel", "Steak", "Morsel", "Berry", "Carrot"}
-local selectedFoodItems = {}
-local medicalItems = {"Bandage", "MedKit"}
-local selectedMedicalItems = {}
-local equipmentItems = {"Revolver", "Rifle", "Leather Body", "Iron Body", "Revolver Ammo", "Rifle Ammo", "Giant Sack", "Good Sack", "Strong Axe", "Good Axe"}
-local selectedEquipmentItems = {}
-
-Tabs.Bring:AddSection({ Title = "Junk", Icon = "box" })
-
-Tabs.Bring:AddDropdown({
-    Title = "Select Junk Items",
-    Desc = "Choose items to bring",
-    Values = junkItems,
-    Multi = true,
-    AllowNone = true,
-    Callback = function(options)
-        selectedJunkItems = options
-    end
-})
-
-Tabs.Bring:AddButton({
-    Title = "Bring Junk Items",
-    Locked = false,
-    Callback = function()
-        local player = game.Players.LocalPlayer
-        if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then return end
-        local hrp = player.Character.HumanoidRootPart
-        local targetPos = hrp.Position + Vector3.new(2, 0, 0)
-        for _, itemName in ipairs(selectedJunkItems) do
-            for _, item in ipairs(workspace:GetDescendants()) do
-                if item.Name == itemName and (item:IsA("BasePart") or item:IsA("Model")) and (item.PrimaryPart or item:FindFirstChildWhichIsA("BasePart")) then
-                    moveItemToPos(item, targetPos)
-                end
-            end
-        end
-    end
-})
-
-Tabs.Bring:AddSection({ Title = "Food", Icon = "utensils" })
-
-local foodItems = {"Cake", "Cooked Steak", "Cooked Morsel", "Steak", "Morsel", "Berry", "Carrot"}
-local selectedFoodItems = {}
-
-Tabs.Bring:AddDropdown({
-    Title = "Select Food Items",
-    Desc = "Choose items to bring",
-    Values = foodItems,
-    Multi = true,
-    AllowNone = true,
-    Callback = function(options)
-        selectedFoodItems = options
-    end
-})
-
-Tabs.Bring:AddButton({
-    Title = "Bring Food Items",
-    Locked = false,
-    Callback = function()
-        local player = game.Players.LocalPlayer
-        if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then return end
-        local hrp = player.Character.HumanoidRootPart
-        local targetPos = hrp.Position + Vector3.new(2, 0, 0)
-        for _, itemName in ipairs(selectedFoodItems) do
-            for _, item in ipairs(workspace:GetDescendants()) do
-                if item.Name == itemName and (item:IsA("BasePart") or item:IsA("Model")) and (item.PrimaryPart or item:FindFirstChildWhichIsA("BasePart")) then
-                    moveItemToPos(item, targetPos)
-                end
-            end
-        end
-    end
-})
